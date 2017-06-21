@@ -42,9 +42,18 @@ function grepR() {
   fi
 }
 
-function colors(){
+function colors() {
   # for color in "${COLORLIST[@]}"; do
   for (( i = 0; i < ${#COLORLIST[@]}; i++ )); do
     echo -e "${COLORLIST[$i]}${1:-"This is"}${DEFAULT} -- ${COLORLISTNAME[$i]}"
   done
+}
+
+function transparencySwap() {
+  state=$(dconf read /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/use-transparent-background)
+  if [[ ${state} == "true" ]]; then
+    dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/use-transparent-background false
+  else
+    dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/use-transparent-background true
+  fi
 }
