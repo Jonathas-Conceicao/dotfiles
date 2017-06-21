@@ -19,8 +19,6 @@ function grepR() {
     return
   fi
   declare statement=$1
-  declare FILECOLOR='\033[1;36m'
-  declare DEFAULTCOLOR='\033[0m'
   declare FILE="/tmp/LIST_OF_FILES.txt"
   ls -p -R |grep -v '/$' > $FILE
 
@@ -33,7 +31,7 @@ function grepR() {
         file="$path/$line"
         found="$(grep -n -I --color=always $statement $file)"
         if [ ! -z "$found" ]; then
-          echo -e "-----------------${FILECOLOR} $file ${DEFAULTCOLOR}-----------------"
+          echo -e "-----------------${LCYAN} $file ${DEFAULT}-----------------"
           echo "${found}"
         fi
       fi
@@ -42,4 +40,11 @@ function grepR() {
   if [ -f $FILE ]; then
     rm $FILE
   fi
+}
+
+function colors(){
+  # for color in "${COLORLIST[@]}"; do
+  for (( i = 0; i < ${#COLORLIST[@]}; i++ )); do
+    echo -e "${COLORLIST[$i]}${1:-"This is"}${DEFAULT} -- ${COLORLISTNAME[$i]}"
+  done
 }
