@@ -29,7 +29,7 @@
     'body': 'typedef struct ${1:name}_ {\n\t${2:/* data */}\n}${1:name}_t;'
   'For loop':
     'prefix': 'for'
-    'body': 'for (${1:int} ${2:i} = 0; ${2:i} < ${3:count}; ${4:++}${2:i}) {\n\t${5:/* code */}\n}'
+    'body': 'for (${1:int} ${2:i} = ${3:0}; ${2:i} < ${4:count}; ${5:++}${2:i}) {\n\t${6:/* code */}\n}'
   'One line if':
     'prefix': 'ifl'
     'body': 'if (${1:/* condition */}) ${2:/* single command */}'
