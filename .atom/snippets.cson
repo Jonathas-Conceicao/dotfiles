@@ -50,4 +50,4 @@
 '.text.tex.latex':
   'Italic':
     'prefix': 'tit'
-    'body': '\\\\textit{$1}$2'
+    'body': '\\\\textit{$1} $2'
