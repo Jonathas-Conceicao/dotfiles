@@ -38,3 +38,11 @@
   'Module':
     'prefix': 'module'
     'body': 'module ${1:Name} (\n\t$2,\n) where'
+
+'.source.shell':
+  'For Each':
+    'prefix': 'fore'
+    'body': '''for ${1:var} in "\$\{${2:list}\[\@\]\}"
+    do
+      ${3:#code}
+    done'''
