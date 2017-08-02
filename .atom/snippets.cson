@@ -33,6 +33,14 @@
   'One line if':
     'prefix': 'ifl'
     'body': 'if (${1:/* condition */}) ${2:/* single command */}'
+  'Header Guard':
+    'prefix': 'guard'
+    'body': '''#ifdef _${1:name}_H
+
+    #define _${1:name}_H
+
+    ${2}
+    #endif'''
 
 '.source .haskell':
   'Module':
