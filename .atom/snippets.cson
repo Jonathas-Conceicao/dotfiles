@@ -58,4 +58,10 @@
 '.text.tex.latex':
   'Italic':
     'prefix': 'tit'
-    'body': '\\\\textit{$1} $2'
+    'body': '\\\\textit{$1}$2'
+  'Lst input file code':
+    'prefix': 'lstinput'
+    'body': '\\\\lstinputlisting[firstline=$1,lastline=$2]{${3:sourceCode/}$4}$5'
+  'Lst inline code':
+    'prefix': 'lstinline'
+    'body': '\\\\lstinline{$1}$2'
