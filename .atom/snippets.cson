@@ -19,7 +19,13 @@
 # If you are unfamiliar with CSON, you can read more about it in the
 # Atom Flight Manual:
 # http://flight-manual.atom.io/using-atom/sections/basic-customization/#_cson
-
+'.source.coffee':
+  'Atom Snippet':
+    'prefix': 'snippet'
+    'body': '''\\\'${1:Name}\\\':
+    \t\\\'prefix\\\': $2
+    \t\\\'body\\\': $3
+    '''
 '.source.c':
   'printf':
     'prefix': 'printf'
@@ -46,6 +52,9 @@
   'Module':
     'prefix': 'module'
     'body': 'module ${1:Name} (\n\t$2,\n) where'
+  'Todo Funcion':
+    'prefix': 'todof'
+    'body': '${1:fun} = error "To Do: ${1:fun}${2}"'
 
 '.source.shell':
   'For Each':
@@ -54,7 +63,6 @@
     do
       ${3:#code}
     done'''
-
 '.text.tex.latex':
   'Italic':
     'prefix': 'tit'
@@ -65,3 +73,19 @@
   'Lst inline code':
     'prefix': 'lstinline'
     'body': '\\\\lstinline{$1}$2'
+'.source.go':
+  'Main Function':
+    'prefix': 'main'
+    'body': 'func main() {\n\t${1:/* Code */}\n}\n'
+  'Function declaration':
+    'prefix': 'func'
+    'body': 'func ${1:functionName}(${2:arg1, arg2 interface\\\{\\\}}) ${3:interface\\\{\\\} }{\n\t${4:/* Code */}\n}\n'
+  'For Interator':
+    'prefix': 'fore'
+    'body': 'for ${1:i}, ${2:unit} := ${3:range(list)}\\\{\n\t${4:/* CODE */}\n}$5'
+  'For While Loop':
+    'prefix': 'while'
+    'body': 'for ${1:condition} \\\{\n\t${2:/* CODE */}\n\\\}$5'
+  'For While Loop':
+    'prefix': 'forw'
+    'body': 'for ${1:condition} \\\{\n\t${2:/* CODE */}\n\\\}$5'
