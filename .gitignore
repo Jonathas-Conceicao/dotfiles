@@ -1,4 +1,4 @@
 *.un~
-.emacs.d/history
+.emacs.d/history/
 .emacs.d/auto-save-list/
 .emacs.d/save/
