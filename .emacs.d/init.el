@@ -22,9 +22,9 @@
 
 ;; My el-get package list, must be ketpet up-to-date
 (setq my:el-get-packages
-      '(highlight-symbol
-	haskell-mode
-	systemd-mode
+			'(highlight-symbol
+				haskell-mode
+				systemd-mode
 ))
 
 (el-get 'sync my:el-get-packages)
