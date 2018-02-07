@@ -25,6 +25,7 @@
 			'(highlight-symbol
 				haskell-mode
 				systemd-mode
+				go-mode
 ))
 
 (el-get 'sync my:el-get-packages)
@@ -147,10 +148,25 @@
 ;; Export env variable to EMACS
 (getenv "PATH")
 
-;; ;; Golang configs
+;; Golang configs
 ;; (require 'go-autocomplete)
 ;; (require 'auto-complete-config)
 ;; (add-to-list 'load-path "~/.emacs.d/golang/")
-;; (add-hook 'before-save-hook #'gofmt-before-save) ;; Runs go fmt after save
+
+;; Go fmt on save
+(add-hook 'before-save-hook #'gofmt-before-save) ;; Runs go fmt after save
+
 ;; (ac-config-default)
 (put 'upcase-region 'disabled nil)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(safe-local-variable-values (quote ((buffer-file-coding-system . utf-8-unix)))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

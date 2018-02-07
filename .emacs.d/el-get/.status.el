@@ -20,6 +20,8 @@
 													(feat feats)
 												(unload-feature feat t))))
 									(require 'el-get))))
+ (go-mode status "installed" recipe
+					(:name go-mode :description "Major mode for the Go programming language" :type github :pkgname "dominikh/go-mode.el"))
  (haskell-mode status "installed" recipe
 							 (:name haskell-mode :description "A Haskell editing mode" :type github :pkgname "haskell/haskell-mode" :info "." :build
 											`(("make" ,(format "EMACS=%s" el-get-emacs)

@@ -373,6 +373,215 @@ Display a list of packages.
 
 ;;;***
 
+;;;### (autoloads nil "go-mode/go-guru" "../../../../.emacs.d/el-get/go-mode/go-guru.el"
+;;;;;;  "063a7c64f07383fe19dd053db7e44b84")
+;;; Generated autoloads from ../../../../.emacs.d/el-get/go-mode/go-guru.el
+
+(autoload 'go-guru-set-scope "go-mode/go-guru" "\
+Set the scope for the Go guru, prompting the user to edit the previous scope.
+
+The scope restricts analysis to the specified packages.
+Its value is a comma-separated list of patterns of these forms:
+	golang.org/x/tools/cmd/guru     # a single package
+	golang.org/x/tools/...          # all packages beneath dir
+	...                             # the entire workspace.
+
+A pattern preceded by '-' is negative, so the scope
+	encoding/...,-encoding/xml
+matches all encoding packages except encoding/xml.
+
+\(fn)" t nil)
+
+(autoload 'go-guru-callees "go-mode/go-guru" "\
+Show possible callees of the function call at the current point.
+
+\(fn)" t nil)
+
+(autoload 'go-guru-callers "go-mode/go-guru" "\
+Show the set of callers of the function containing the current point.
+
+\(fn)" t nil)
+
+(autoload 'go-guru-callstack "go-mode/go-guru" "\
+Show an arbitrary path from a root of the call graph to the
+function containing the current point.
+
+\(fn)" t nil)
+
+(autoload 'go-guru-definition "go-mode/go-guru" "\
+Jump to the definition of the selected identifier.
+
+\(fn &optional OTHER-WINDOW)" t nil)
+
+(autoload 'go-guru-definition-other-window "go-mode/go-guru" "\
+Jump to the defintion of the selected identifier in another window
+
+\(fn)" t nil)
+
+(autoload 'go-guru-describe "go-mode/go-guru" "\
+Describe the selected syntax, its kind, type and methods.
+
+\(fn)" t nil)
+
+(autoload 'go-guru-pointsto "go-mode/go-guru" "\
+Show what the selected expression points to.
+
+\(fn)" t nil)
+
+(autoload 'go-guru-implements "go-mode/go-guru" "\
+Describe the 'implements' relation for types in the package
+containing the current point.
+
+\(fn)" t nil)
+
+(autoload 'go-guru-freevars "go-mode/go-guru" "\
+Enumerate the free variables of the current selection.
+
+\(fn)" t nil)
+
+(autoload 'go-guru-peers "go-mode/go-guru" "\
+Enumerate the set of possible corresponding sends/receives for
+this channel receive/send operation.
+
+\(fn)" t nil)
+
+(autoload 'go-guru-referrers "go-mode/go-guru" "\
+Enumerate all references to the object denoted by the selected
+identifier.
+
+\(fn)" t nil)
+
+(autoload 'go-guru-whicherrs "go-mode/go-guru" "\
+Show globals, constants and types to which the selected
+expression (of type 'error') may refer.
+
+\(fn)" t nil)
+
+(autoload 'go-guru-unhighlight-identifiers "go-mode/go-guru" "\
+Remove highlights from previously highlighted identifier.
+
+\(fn)" nil nil)
+
+(autoload 'go-guru-hl-identifier "go-mode/go-guru" "\
+Highlight all instances of the identifier under point. Removes
+highlights from previously highlighted identifier.
+
+\(fn)" t nil)
+
+(autoload 'go-guru-hl-identifier-mode "go-mode/go-guru" "\
+Highlight instances of the identifier at point after a short
+timeout.
+
+\(fn &optional ARG)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "go-mode/go-mode" "../../../../.emacs.d/el-get/go-mode/go-mode.el"
+;;;;;;  "56ebc9d8bdb6ef3f2ec99822abb13186")
+;;; Generated autoloads from ../../../../.emacs.d/el-get/go-mode/go-mode.el
+
+(autoload 'go-mode "go-mode/go-mode" "\
+Major mode for editing Go source text.
+
+This mode provides (not just) basic editing capabilities for
+working with Go code. It offers almost complete syntax
+highlighting, indentation that is almost identical to gofmt and
+proper parsing of the buffer content to allow features such as
+navigation by function, manipulation of comments or detection of
+strings.
+
+In addition to these core features, it offers various features to
+help with writing Go code. You can directly run buffer content
+through gofmt, read godoc documentation from within Emacs, modify
+and clean up the list of package imports or interact with the
+Playground (uploading and downloading pastes).
+
+The following extra functions are defined:
+
+- `gofmt'
+- `godoc' and `godoc-at-point'
+- `go-import-add'
+- `go-remove-unused-imports'
+- `go-goto-arguments'
+- `go-goto-docstring'
+- `go-goto-function'
+- `go-goto-function-name'
+- `go-goto-imports'
+- `go-goto-return-values'
+- `go-goto-method-receiver'
+- `go-play-buffer' and `go-play-region'
+- `go-download-play'
+- `godef-describe' and `godef-jump'
+- `go-coverage'
+- `go-set-project'
+- `go-reset-gopath'
+
+If you want to automatically run `gofmt' before saving a file,
+add the following hook to your emacs configuration:
+
+\(add-hook 'before-save-hook #'gofmt-before-save)
+
+If you want to use `godef-jump' instead of etags (or similar),
+consider binding godef-jump to `M-.', which is the default key
+for `find-tag':
+
+\(add-hook 'go-mode-hook (lambda ()
+                          (local-set-key (kbd \"M-.\") #'godef-jump)))
+
+Please note that godef is an external dependency. You can install
+it with
+
+go get github.com/rogpeppe/godef
+
+
+If you're looking for even more integration with Go, namely
+on-the-fly syntax checking, auto-completion and snippets, it is
+recommended that you look at flycheck
+\(see URL `https://github.com/flycheck/flycheck') or flymake in combination
+with goflymake (see URL `https://github.com/dougm/goflymake'), gocode
+\(see URL `https://github.com/nsf/gocode'), go-eldoc
+\(see URL `github.com/syohex/emacs-go-eldoc') and yasnippet-go
+\(see URL `https://github.com/dominikh/yasnippet-go')
+
+\(fn)" t nil)
+
+(add-to-list 'auto-mode-alist (cons "\\.go\\'" 'go-mode))
+
+(autoload 'gofmt-before-save "go-mode/go-mode" "\
+Add this to .emacs to run gofmt on the current buffer when saving:
+\(add-hook 'before-save-hook 'gofmt-before-save).
+
+Note that this will cause ‘go-mode’ to get loaded the first time
+you save any file, kind of defeating the point of autoloading.
+
+\(fn)" t nil)
+
+(autoload 'godoc "go-mode/go-mode" "\
+Show Go documentation for QUERY, much like \\<go-mode-map>\\[man].
+
+\(fn QUERY)" t nil)
+
+(autoload 'go-download-play "go-mode/go-mode" "\
+Download a paste from the playground and insert it in a Go buffer.
+Tries to look for a URL at point.
+
+\(fn URL)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "go-mode/go-rename" "../../../../.emacs.d/el-get/go-mode/go-rename.el"
+;;;;;;  "99028a0e5b90ac2c52c86deebea21ae4")
+;;; Generated autoloads from ../../../../.emacs.d/el-get/go-mode/go-rename.el
+
+(autoload 'go-rename "go-mode/go-rename" "\
+Rename the entity denoted by the identifier at point, using
+the `gorename' tool. With FORCE, call `gorename' with the
+`-force' flag.
+
+\(fn NEW-NAME &optional FORCE)" t nil)
+
+;;;***
+
 ;;;### (autoloads nil "haskell-mode/ghc-core" "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el"
 ;;;;;;  "96453ab274d3f4542e7ccf9af74bbfc2")
 ;;; Generated autoloads from ../../../../.emacs.d/el-get/haskell-mode/ghc-core.el
@@ -1490,38 +1699,6 @@ Toggle native previewing on save for a specific markdown file.
 
 ;;;***
 
-;;;### (autoloads nil "systemd-mode/systemd" "../../../../.emacs.d/el-get/systemd-mode/systemd.el"
-;;;;;;  "8288a4b5975b453aa35d672175727bc2")
-;;; Generated autoloads from ../../../../.emacs.d/el-get/systemd-mode/systemd.el
-
-(defconst systemd-autoload-regexp (eval-when-compile (rx (+\? (any "a-zA-Z0-9-_.@\\")) "." (or "automount" "busname" "mount" "service" "slice" "socket" "swap" "target" "timer" "link" "netdev" "network") string-end)) "\
-Regexp for file buffers in which to autoload `systemd-mode'.")
-
-(defconst systemd-tempfn-autoload-regexp (eval-when-compile (rx ".#" (or (and (+\? (any "a-zA-Z0-9-_.@\\")) "." (or "automount" "busname" "mount" "service" "slice" "socket" "swap" "target" "timer" "link" "netdev" "network")) "override.conf") (= 16 (char hex-digit)) string-end)) "\
-Regexp for temp file buffers in which to autoload `systemd-mode'.")
-
-(defconst systemd-dropin-autoload-regexp (eval-when-compile (rx "/systemd/" (+\? anything) ".d/" (+\? (not (any 47))) ".conf" string-end)) "\
-Regexp for dropin config file buffers in which to autoload `systemd-mode'.")
- (add-to-list 'auto-mode-alist '("\\.nspawn\\'" . systemd-mode))
- (add-to-list 'auto-mode-alist `(,systemd-autoload-regexp . systemd-mode))
- (add-to-list 'auto-mode-alist `(,systemd-tempfn-autoload-regexp . systemd-mode))
- (add-to-list 'auto-mode-alist `(,systemd-dropin-autoload-regexp . systemd-mode))
-
-(autoload 'systemd-mode "systemd-mode/systemd" "\
-Major mode for editing systemd unit files.
-See http://www.freedesktop.org/wiki/Software/systemd/ for more
-information about systemd.
-
-In addition to any hooks its parent mode might have run, this
-mode runs the hook `systemd-mode-hook' at mode initialization.
-
-Key bindings:
-\\{systemd-mode-map}
-
-\(fn)" t nil)
-
-;;;***
-
 ;;;### (autoloads nil nil ("../../../../.emacs.d/el-get/el-get/el-get-bundle.el"
 ;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-bundle.el" "../../../../.emacs.d/el-get/el-get/el-get-bundle.el"
 ;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-check.el" "../../../../.emacs.d/el-get/el-get/el-get-check.el"
@@ -1645,36 +1822,35 @@ Key bindings:
 
 ;;;***
 
-;;;### (autoloads nil "wakatime-mode/wakatime-mode" "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
-;;;;;;  "8fda72801357b5e5ee0095ca1a058e4b")
-;;; Generated autoloads from ../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el
+;;;### (autoloads nil "systemd-mode/systemd" "../../../../.emacs.d/el-get/systemd-mode/systemd.el"
+;;;;;;  "8288a4b5975b453aa35d672175727bc2")
+;;; Generated autoloads from ../../../../.emacs.d/el-get/systemd-mode/systemd.el
 
-(autoload 'wakatime-mode "wakatime-mode/wakatime-mode" "\
-Toggle WakaTime (WakaTime mode).
+(defconst systemd-autoload-regexp (eval-when-compile (rx (+\? (any "a-zA-Z0-9-_.@\\")) "." (or "automount" "busname" "mount" "service" "slice" "socket" "swap" "target" "timer" "link" "netdev" "network") string-end)) "\
+Regexp for file buffers in which to autoload `systemd-mode'.")
 
-\(fn &optional ARG)" t nil)
+(defconst systemd-tempfn-autoload-regexp (eval-when-compile (rx ".#" (or (and (+\? (any "a-zA-Z0-9-_.@\\")) "." (or "automount" "busname" "mount" "service" "slice" "socket" "swap" "target" "timer" "link" "netdev" "network")) "override.conf") (= 16 (char hex-digit)) string-end)) "\
+Regexp for temp file buffers in which to autoload `systemd-mode'.")
 
-(defvar global-wakatime-mode nil "\
-Non-nil if Global Wakatime mode is enabled.
-See the `global-wakatime-mode' command
-for a description of this minor mode.
-Setting this variable directly does not take effect;
-either customize it (see the info node `Easy Customization')
-or call the function `global-wakatime-mode'.")
+(defconst systemd-dropin-autoload-regexp (eval-when-compile (rx "/systemd/" (+\? anything) ".d/" (+\? (not (any 47))) ".conf" string-end)) "\
+Regexp for dropin config file buffers in which to autoload `systemd-mode'.")
+ (add-to-list 'auto-mode-alist '("\\.nspawn\\'" . systemd-mode))
+ (add-to-list 'auto-mode-alist `(,systemd-autoload-regexp . systemd-mode))
+ (add-to-list 'auto-mode-alist `(,systemd-tempfn-autoload-regexp . systemd-mode))
+ (add-to-list 'auto-mode-alist `(,systemd-dropin-autoload-regexp . systemd-mode))
 
-(custom-autoload 'global-wakatime-mode "wakatime-mode/wakatime-mode" nil)
+(autoload 'systemd-mode "systemd-mode/systemd" "\
+Major mode for editing systemd unit files.
+See http://www.freedesktop.org/wiki/Software/systemd/ for more
+information about systemd.
 
-(autoload 'global-wakatime-mode "wakatime-mode/wakatime-mode" "\
-Toggle Wakatime mode in all buffers.
-With prefix ARG, enable Global Wakatime mode if ARG is positive;
-otherwise, disable it.  If called from Lisp, enable the mode if
-ARG is omitted or nil.
+In addition to any hooks its parent mode might have run, this
+mode runs the hook `systemd-mode-hook' at mode initialization.
 
-Wakatime mode is enabled in all buffers where
-`(lambda nil (wakatime-mode 1))' would do it.
-See `wakatime-mode' for more information on Wakatime mode.
+Key bindings:
+\\{systemd-mode-map}
 
-\(fn &optional ARG)" t nil)
+\(fn)" t nil)
 
 ;;;***
 
@@ -1798,6 +1974,80 @@ See `wakatime-mode' for more information on Wakatime mode.
 ;;;;;;  "el-get/el-get-list-packages.el" "el-get/el-get.el" "el-get/el-get.el"
 ;;;;;;  "el-get/el-get.el" "el-get/el-get.el") (23162 24771 262823
 ;;;;;;  190000))
+
+;;;***
+
+;;;### (autoloads nil "wakatime-mode/wakatime-mode" "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
+;;;;;;  "8fda72801357b5e5ee0095ca1a058e4b")
+;;; Generated autoloads from ../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el
+
+(autoload 'wakatime-mode "wakatime-mode/wakatime-mode" "\
+Toggle WakaTime (WakaTime mode).
+
+\(fn &optional ARG)" t nil)
+
+(defvar global-wakatime-mode nil "\
+Non-nil if Global Wakatime mode is enabled.
+See the `global-wakatime-mode' command
+for a description of this minor mode.
+Setting this variable directly does not take effect;
+either customize it (see the info node `Easy Customization')
+or call the function `global-wakatime-mode'.")
+
+(custom-autoload 'global-wakatime-mode "wakatime-mode/wakatime-mode" nil)
+
+(autoload 'global-wakatime-mode "wakatime-mode/wakatime-mode" "\
+Toggle Wakatime mode in all buffers.
+With prefix ARG, enable Global Wakatime mode if ARG is positive;
+otherwise, disable it.  If called from Lisp, enable the mode if
+ARG is omitted or nil.
+
+Wakatime mode is enabled in all buffers where
+`(lambda nil (wakatime-mode 1))' would do it.
+See `wakatime-mode' for more information on Wakatime mode.
+
+\(fn &optional ARG)" t nil)
+
+;;;***
+
+;;;### (autoloads nil nil ("../../../../.emacs.d/el-get/el-get/el-get-bundle.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-check.el" "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get.el" "../../../../.emacs.d/el-get/go-mode/go-guru.el"
+;;;;;;  "../../../../.emacs.d/el-get/go-mode/go-mode.el" "../../../../.emacs.d/el-get/go-mode/go-rename.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el" "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell.el" "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
+;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
+;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/systemd-mode/systemd.el" "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
+;;;;;;  "el-get/el-get-bundle.el" "el-get/el-get-check.el" "el-get/el-get-list-packages.el"
+;;;;;;  "el-get/el-get.el") (23163 11922 752311 550000))
 
 ;;;***
 
