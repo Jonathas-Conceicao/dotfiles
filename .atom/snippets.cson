@@ -89,3 +89,9 @@
   'For While Loop':
     'prefix': 'forw'
     'body': 'for ${1:condition} \\\{\n\t${2:/* CODE */}\n\\\}$5'
+  'Who needs gdb?':
+    'prefix': 'gdb'
+    'body': 'fmt.Println("$1")$2'
+  'Who needs gdb? OS':
+    'prefix': 'gdberr'
+    'body': 'fmt.Fprintln(os.Stderr, "$1")$2'
