@@ -188,6 +188,55 @@ Display a list of packages.
 
 ;;;***
 
+;;;### (autoloads nil "auto-complete/auto-complete" "../../../../.emacs.d/el-get/auto-complete/auto-complete.el"
+;;;;;;  "0f564b17b1ef2e700470197f0218dc22")
+;;; Generated autoloads from ../../../../.emacs.d/el-get/auto-complete/auto-complete.el
+
+(autoload 'auto-complete "auto-complete/auto-complete" "\
+Start auto-completion at current point.
+
+\(fn &optional SOURCES)" t nil)
+
+(autoload 'auto-complete-mode "auto-complete/auto-complete" "\
+AutoComplete mode
+
+\(fn &optional ARG)" t nil)
+
+(defvar global-auto-complete-mode nil "\
+Non-nil if Global Auto-Complete mode is enabled.
+See the `global-auto-complete-mode' command
+for a description of this minor mode.
+Setting this variable directly does not take effect;
+either customize it (see the info node `Easy Customization')
+or call the function `global-auto-complete-mode'.")
+
+(custom-autoload 'global-auto-complete-mode "auto-complete/auto-complete" nil)
+
+(autoload 'global-auto-complete-mode "auto-complete/auto-complete" "\
+Toggle Auto-Complete mode in all buffers.
+With prefix ARG, enable Global Auto-Complete mode if ARG is positive;
+otherwise, disable it.  If called from Lisp, enable the mode if
+ARG is omitted or nil.
+
+Auto-Complete mode is enabled in all buffers where
+`auto-complete-mode-maybe' would do it.
+See `auto-complete-mode' for more information on Auto-Complete mode.
+
+\(fn &optional ARG)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "auto-complete/auto-complete-config" "../../../../.emacs.d/el-get/auto-complete/auto-complete-config.el"
+;;;;;;  "ff41e174795402bf5f86dfbc7e9060d2")
+;;; Generated autoloads from ../../../../.emacs.d/el-get/auto-complete/auto-complete-config.el
+
+(autoload 'ac-config-default "auto-complete/auto-complete-config" "\
+
+
+\(fn)" nil nil)
+
+;;;***
+
 ;;;### (autoloads nil "el-get/el-get" "../../../../.emacs.d/el-get/el-get/el-get.el"
 ;;;;;;  "725730d0425ec018bd83aa83226d5e9e")
 ;;; Generated autoloads from ../../../../.emacs.d/el-get/el-get/el-get.el
@@ -373,212 +422,210 @@ Display a list of packages.
 
 ;;;***
 
-;;;### (autoloads nil "go-mode/go-guru" "../../../../.emacs.d/el-get/go-mode/go-guru.el"
-;;;;;;  "063a7c64f07383fe19dd053db7e44b84")
-;;; Generated autoloads from ../../../../.emacs.d/el-get/go-mode/go-guru.el
+;;;### (autoloads nil "emacs-async/async" "../../../../.emacs.d/el-get/emacs-async/async.el"
+;;;;;;  "df579b857c3571a18ab0e4ae35e49a7f")
+;;; Generated autoloads from ../../../../.emacs.d/el-get/emacs-async/async.el
 
-(autoload 'go-guru-set-scope "go-mode/go-guru" "\
-Set the scope for the Go guru, prompting the user to edit the previous scope.
+(autoload 'async-start-process "emacs-async/async" "\
+Start the executable PROGRAM asynchronously.  See `async-start'.
+PROGRAM is passed PROGRAM-ARGS, calling FINISH-FUNC with the
+process object when done.  If FINISH-FUNC is nil, the future
+object will return the process object when the program is
+finished.  Set DEFAULT-DIRECTORY to change PROGRAM's current
+working directory.
 
-The scope restricts analysis to the specified packages.
-Its value is a comma-separated list of patterns of these forms:
-	golang.org/x/tools/cmd/guru     # a single package
-	golang.org/x/tools/...          # all packages beneath dir
-	...                             # the entire workspace.
+\(fn NAME PROGRAM FINISH-FUNC &rest PROGRAM-ARGS)" nil nil)
 
-A pattern preceded by '-' is negative, so the scope
-	encoding/...,-encoding/xml
-matches all encoding packages except encoding/xml.
+(autoload 'async-start "emacs-async/async" "\
+Execute START-FUNC (often a lambda) in a subordinate Emacs process.
+When done, the return value is passed to FINISH-FUNC.  Example:
 
-\(fn)" t nil)
+    (async-start
+       ;; What to do in the child process
+       (lambda ()
+         (message \"This is a test\")
+         (sleep-for 3)
+         222)
 
-(autoload 'go-guru-callees "go-mode/go-guru" "\
-Show possible callees of the function call at the current point.
+       ;; What to do when it finishes
+       (lambda (result)
+         (message \"Async process done, result should be 222: %s\"
+                  result)))
 
-\(fn)" t nil)
+If FINISH-FUNC is nil or missing, a future is returned that can
+be inspected using `async-get', blocking until the value is
+ready.  Example:
 
-(autoload 'go-guru-callers "go-mode/go-guru" "\
-Show the set of callers of the function containing the current point.
+    (let ((proc (async-start
+                   ;; What to do in the child process
+                   (lambda ()
+                     (message \"This is a test\")
+                     (sleep-for 3)
+                     222))))
 
-\(fn)" t nil)
+        (message \"I'm going to do some work here\") ;; ....
 
-(autoload 'go-guru-callstack "go-mode/go-guru" "\
-Show an arbitrary path from a root of the call graph to the
-function containing the current point.
+        (message \"Waiting on async process, result should be 222: %s\"
+                 (async-get proc)))
 
-\(fn)" t nil)
+If you don't want to use a callback, and you don't care about any
+return value from the child process, pass the `ignore' symbol as
+the second argument (if you don't, and never call `async-get', it
+will leave *emacs* process buffers hanging around):
 
-(autoload 'go-guru-definition "go-mode/go-guru" "\
-Jump to the definition of the selected identifier.
+    (async-start
+     (lambda ()
+       (delete-file \"a remote file on a slow link\" nil))
+     'ignore)
 
-\(fn &optional OTHER-WINDOW)" t nil)
+Note: Even when FINISH-FUNC is present, a future is still
+returned except that it yields no value (since the value is
+passed to FINISH-FUNC).  Call `async-get' on such a future always
+returns nil.  It can still be useful, however, as an argument to
+`async-ready' or `async-wait'.
 
-(autoload 'go-guru-definition-other-window "go-mode/go-guru" "\
-Jump to the defintion of the selected identifier in another window
+\(fn START-FUNC &optional FINISH-FUNC)" nil nil)
 
-\(fn)" t nil)
+;;;***
+
+;;;### (autoloads nil "emacs-async/async-bytecomp" "../../../../.emacs.d/el-get/emacs-async/async-bytecomp.el"
+;;;;;;  "74771a817b3b51f878725bab4198d4f6")
+;;; Generated autoloads from ../../../../.emacs.d/el-get/emacs-async/async-bytecomp.el
 
-(autoload 'go-guru-describe "go-mode/go-guru" "\
-Describe the selected syntax, its kind, type and methods.
+(autoload 'async-byte-recompile-directory "emacs-async/async-bytecomp" "\
+Compile all *.el files in DIRECTORY asynchronously.
+All *.elc files are systematically deleted before proceeding.
 
-\(fn)" t nil)
+\(fn DIRECTORY &optional QUIET)" nil nil)
 
-(autoload 'go-guru-pointsto "go-mode/go-guru" "\
-Show what the selected expression points to.
+(defvar async-bytecomp-package-mode nil "\
+Non-nil if Async-Bytecomp-Package mode is enabled.
+See the `async-bytecomp-package-mode' command
+for a description of this minor mode.
+Setting this variable directly does not take effect;
+either customize it (see the info node `Easy Customization')
+or call the function `async-bytecomp-package-mode'.")
 
-\(fn)" t nil)
+(custom-autoload 'async-bytecomp-package-mode "emacs-async/async-bytecomp" nil)
 
-(autoload 'go-guru-implements "go-mode/go-guru" "\
-Describe the 'implements' relation for types in the package
-containing the current point.
-
-\(fn)" t nil)
-
-(autoload 'go-guru-freevars "go-mode/go-guru" "\
-Enumerate the free variables of the current selection.
-
-\(fn)" t nil)
-
-(autoload 'go-guru-peers "go-mode/go-guru" "\
-Enumerate the set of possible corresponding sends/receives for
-this channel receive/send operation.
-
-\(fn)" t nil)
-
-(autoload 'go-guru-referrers "go-mode/go-guru" "\
-Enumerate all references to the object denoted by the selected
-identifier.
-
-\(fn)" t nil)
-
-(autoload 'go-guru-whicherrs "go-mode/go-guru" "\
-Show globals, constants and types to which the selected
-expression (of type 'error') may refer.
-
-\(fn)" t nil)
-
-(autoload 'go-guru-unhighlight-identifiers "go-mode/go-guru" "\
-Remove highlights from previously highlighted identifier.
-
-\(fn)" nil nil)
-
-(autoload 'go-guru-hl-identifier "go-mode/go-guru" "\
-Highlight all instances of the identifier under point. Removes
-highlights from previously highlighted identifier.
-
-\(fn)" t nil)
-
-(autoload 'go-guru-hl-identifier-mode "go-mode/go-guru" "\
-Highlight instances of the identifier at point after a short
-timeout.
+(autoload 'async-bytecomp-package-mode "emacs-async/async-bytecomp" "\
+Byte compile asynchronously packages installed with package.el.
+Async compilation of packages can be controlled by
+`async-bytecomp-allowed-packages'.
 
 \(fn &optional ARG)" t nil)
 
 ;;;***
 
-;;;### (autoloads nil "go-mode/go-mode" "../../../../.emacs.d/el-get/go-mode/go-mode.el"
-;;;;;;  "56ebc9d8bdb6ef3f2ec99822abb13186")
-;;; Generated autoloads from ../../../../.emacs.d/el-get/go-mode/go-mode.el
+;;;### (autoloads nil "emacs-async/dired-async" "../../../../.emacs.d/el-get/emacs-async/dired-async.el"
+;;;;;;  "9fa4eacc12640ee5a2a48604f72f8ef6")
+;;; Generated autoloads from ../../../../.emacs.d/el-get/emacs-async/dired-async.el
 
-(autoload 'go-mode "go-mode/go-mode" "\
-Major mode for editing Go source text.
+(defvar dired-async-mode nil "\
+Non-nil if Dired-Async mode is enabled.
+See the `dired-async-mode' command
+for a description of this minor mode.
+Setting this variable directly does not take effect;
+either customize it (see the info node `Easy Customization')
+or call the function `dired-async-mode'.")
 
-This mode provides (not just) basic editing capabilities for
-working with Go code. It offers almost complete syntax
-highlighting, indentation that is almost identical to gofmt and
-proper parsing of the buffer content to allow features such as
-navigation by function, manipulation of comments or detection of
-strings.
+(custom-autoload 'dired-async-mode "emacs-async/dired-async" nil)
 
-In addition to these core features, it offers various features to
-help with writing Go code. You can directly run buffer content
-through gofmt, read godoc documentation from within Emacs, modify
-and clean up the list of package imports or interact with the
-Playground (uploading and downloading pastes).
+(autoload 'dired-async-mode "emacs-async/dired-async" "\
+Do dired actions asynchronously.
 
-The following extra functions are defined:
+\(fn &optional ARG)" t nil)
 
-- `gofmt'
-- `godoc' and `godoc-at-point'
-- `go-import-add'
-- `go-remove-unused-imports'
-- `go-goto-arguments'
-- `go-goto-docstring'
-- `go-goto-function'
-- `go-goto-function-name'
-- `go-goto-imports'
-- `go-goto-return-values'
-- `go-goto-method-receiver'
-- `go-play-buffer' and `go-play-region'
-- `go-download-play'
-- `godef-describe' and `godef-jump'
-- `go-coverage'
-- `go-set-project'
-- `go-reset-gopath'
+(autoload 'dired-async-do-copy "emacs-async/dired-async" "\
+Run ‘dired-do-copy’ asynchronously.
 
-If you want to automatically run `gofmt' before saving a file,
-add the following hook to your emacs configuration:
+\(fn &optional ARG)" t nil)
 
-\(add-hook 'before-save-hook #'gofmt-before-save)
+(autoload 'dired-async-do-symlink "emacs-async/dired-async" "\
+Run ‘dired-do-symlink’ asynchronously.
 
-If you want to use `godef-jump' instead of etags (or similar),
-consider binding godef-jump to `M-.', which is the default key
-for `find-tag':
+\(fn &optional ARG)" t nil)
 
-\(add-hook 'go-mode-hook (lambda ()
-                          (local-set-key (kbd \"M-.\") #'godef-jump)))
+(autoload 'dired-async-do-hardlink "emacs-async/dired-async" "\
+Run ‘dired-do-hardlink’ asynchronously.
 
-Please note that godef is an external dependency. You can install
-it with
+\(fn &optional ARG)" t nil)
 
-go get github.com/rogpeppe/godef
+(autoload 'dired-async-do-rename "emacs-async/dired-async" "\
+Run ‘dired-do-rename’ asynchronously.
 
-
-If you're looking for even more integration with Go, namely
-on-the-fly syntax checking, auto-completion and snippets, it is
-recommended that you look at flycheck
-\(see URL `https://github.com/flycheck/flycheck') or flymake in combination
-with goflymake (see URL `https://github.com/dougm/goflymake'), gocode
-\(see URL `https://github.com/nsf/gocode'), go-eldoc
-\(see URL `github.com/syohex/emacs-go-eldoc') and yasnippet-go
-\(see URL `https://github.com/dominikh/yasnippet-go')
-
-\(fn)" t nil)
-
-(add-to-list 'auto-mode-alist (cons "\\.go\\'" 'go-mode))
-
-(autoload 'gofmt-before-save "go-mode/go-mode" "\
-Add this to .emacs to run gofmt on the current buffer when saving:
-\(add-hook 'before-save-hook 'gofmt-before-save).
-
-Note that this will cause ‘go-mode’ to get loaded the first time
-you save any file, kind of defeating the point of autoloading.
-
-\(fn)" t nil)
-
-(autoload 'godoc "go-mode/go-mode" "\
-Show Go documentation for QUERY, much like \\<go-mode-map>\\[man].
-
-\(fn QUERY)" t nil)
-
-(autoload 'go-download-play "go-mode/go-mode" "\
-Download a paste from the playground and insert it in a Go buffer.
-Tries to look for a URL at point.
-
-\(fn URL)" t nil)
+\(fn &optional ARG)" t nil)
 
 ;;;***
 
-;;;### (autoloads nil "go-mode/go-rename" "../../../../.emacs.d/el-get/go-mode/go-rename.el"
-;;;;;;  "99028a0e5b90ac2c52c86deebea21ae4")
-;;; Generated autoloads from ../../../../.emacs.d/el-get/go-mode/go-rename.el
+;;;### (autoloads nil "ghub/ghub" "../../../../.emacs.d/el-get/ghub/ghub.el"
+;;;;;;  "75e04d50fdad0c10a4e0d3c0575c0aac")
+;;; Generated autoloads from ../../../../.emacs.d/el-get/ghub/ghub.el
 
-(autoload 'go-rename "go-mode/go-rename" "\
-Rename the entity denoted by the identifier at point, using
-the `gorename' tool. With FORCE, call `gorename' with the
-`-force' flag.
+(autoload 'ghub-create-token "ghub/ghub" "\
+Create, store and return a new token.
 
-\(fn NEW-NAME &optional FORCE)" t nil)
+HOST is the Github instance, usually \"api.github.com\".
+USERNAME is the name of a user on that instance.
+PACKAGE is the package that will use the token.
+SCOPES are the scopes the token is given access to.
+
+\(fn HOST USERNAME PACKAGE SCOPES)" t nil)
+
+(autoload 'ghub-token-scopes "ghub/ghub" "\
+Return and echo the scopes of the specified token.
+This is intended for debugging purposes only.  The user
+has to provide several values including their password.
+
+\(fn HOST USERNAME PACKAGE)" t nil)
+
+;;;***
+
+;;;### (autoloads nil "git-gutter/git-gutter" "../../../../.emacs.d/el-get/git-gutter/git-gutter.el"
+;;;;;;  "865be5b8fc0e28efa9d7734589fbe303")
+;;; Generated autoloads from ../../../../.emacs.d/el-get/git-gutter/git-gutter.el
+
+(autoload 'git-gutter:linum-setup "git-gutter/git-gutter" "\
+Setup for linum-mode.
+
+\(fn)" nil nil)
+
+(autoload 'git-gutter-mode "git-gutter/git-gutter" "\
+Git-Gutter mode
+
+\(fn &optional ARG)" t nil)
+
+(defvar global-git-gutter-mode nil "\
+Non-nil if Global Git-Gutter mode is enabled.
+See the `global-git-gutter-mode' command
+for a description of this minor mode.
+Setting this variable directly does not take effect;
+either customize it (see the info node `Easy Customization')
+or call the function `global-git-gutter-mode'.")
+
+(custom-autoload 'global-git-gutter-mode "git-gutter/git-gutter" nil)
+
+(autoload 'global-git-gutter-mode "git-gutter/git-gutter" "\
+Toggle Git-Gutter mode in all buffers.
+With prefix ARG, enable Global Git-Gutter mode if ARG is positive;
+otherwise, disable it.  If called from Lisp, enable the mode if
+ARG is omitted or nil.
+
+Git-Gutter mode is enabled in all buffers where
+`git-gutter--turn-on' would do it.
+See `git-gutter-mode' for more information on Git-Gutter mode.
+
+\(fn &optional ARG)" t nil)
+
+(autoload 'git-gutter "git-gutter/git-gutter" "\
+Show diff information in gutter
+
+\(fn)" t nil)
+
+(autoload 'git-gutter:toggle "git-gutter/git-gutter" "\
+Toggle to show diff information.
+
+\(fn)" t nil)
 
 ;;;***
 
@@ -1699,30 +1746,65 @@ Toggle native previewing on save for a specific markdown file.
 
 ;;;***
 
-;;;### (autoloads nil nil ("../../../../.emacs.d/el-get/el-get/el-get-bundle.el"
+;;;### (autoloads nil nil ("../../../../.emacs.d/el-get/auto-complete/auto-complete-config.el"
+;;;;;;  "../../../../.emacs.d/el-get/auto-complete/auto-complete-config.el"
+;;;;;;  "../../../../.emacs.d/el-get/auto-complete/auto-complete-pkg.el"
+;;;;;;  "../../../../.emacs.d/el-get/auto-complete/auto-complete.el"
+;;;;;;  "../../../../.emacs.d/el-get/auto-complete/auto-complete.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-bundle.el" "../../../../.emacs.d/el-get/el-get/el-get-bundle.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-bundle.el" "../../../../.emacs.d/el-get/el-get/el-get-bundle.el"
 ;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-bundle.el" "../../../../.emacs.d/el-get/el-get/el-get-bundle.el"
 ;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-check.el" "../../../../.emacs.d/el-get/el-get/el-get-check.el"
-;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-check.el" "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-check.el" "../../../../.emacs.d/el-get/el-get/el-get-check.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-check.el" "../../../../.emacs.d/el-get/el-get/el-get-check.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
 ;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
 ;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
 ;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get.el" "../../../../.emacs.d/el-get/el-get/el-get.el"
-;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get.el" "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get.el" "../../../../.emacs.d/el-get/el-get/el-get.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get.el" "../../../../.emacs.d/el-get/el-get/el-get.el"
+;;;;;;  "../../../../.emacs.d/el-get/emacs-async/async-bytecomp.el"
+;;;;;;  "../../../../.emacs.d/el-get/emacs-async/async.el" "../../../../.emacs.d/el-get/emacs-async/dired-async.el"
+;;;;;;  "../../../../.emacs.d/el-get/fuzzy/fuzzy.el" "../../../../.emacs.d/el-get/ghub/ghub.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el" "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el" "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el" "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
@@ -1730,22 +1812,43 @@ Toggle native previewing on save for a specific markdown file.
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-complete-module.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
@@ -1753,12 +1856,24 @@ Toggle native previewing on save for a specific markdown file.
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
@@ -1766,6 +1881,12 @@ Toggle native previewing on save for a specific markdown file.
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
@@ -1774,12 +1895,24 @@ Toggle native previewing on save for a specific markdown file.
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
@@ -1790,6 +1923,12 @@ Toggle native previewing on save for a specific markdown file.
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
@@ -1797,28 +1936,538 @@ Toggle native previewing on save for a specific markdown file.
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-utils.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell.el" "../../../../.emacs.d/el-get/haskell-mode/haskell.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell.el" "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell.el" "../../../../.emacs.d/el-get/haskell-mode/haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell.el" "../../../../.emacs.d/el-get/haskell-mode/haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
 ;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
 ;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
+;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
+;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
+;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
 ;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
-;;;;;;  "../../../../.emacs.d/el-get/systemd-mode/systemd.el" "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode-test.el"
+;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/powerline/powerline-themes.el"
+;;;;;;  "../../../../.emacs.d/el-get/powerline/powerline.el" "../../../../.emacs.d/el-get/systemd-mode/systemd.el"
+;;;;;;  "../../../../.emacs.d/el-get/systemd-mode/systemd.el" "../../../../.emacs.d/el-get/systemd-mode/systemd.el"
+;;;;;;  "../../../../.emacs.d/el-get/systemd-mode/systemd.el" "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
 ;;;;;;  "el-get/el-get-bundle.el" "el-get/el-get-bundle.el" "el-get/el-get-bundle.el"
+;;;;;;  "el-get/el-get-bundle.el" "el-get/el-get-bundle.el" "el-get/el-get-bundle.el"
+;;;;;;  "el-get/el-get-check.el" "el-get/el-get-check.el" "el-get/el-get-check.el"
 ;;;;;;  "el-get/el-get-check.el" "el-get/el-get-check.el" "el-get/el-get-check.el"
 ;;;;;;  "el-get/el-get-list-packages.el" "el-get/el-get-list-packages.el"
+;;;;;;  "el-get/el-get-list-packages.el" "el-get/el-get-list-packages.el"
+;;;;;;  "el-get/el-get-list-packages.el" "el-get/el-get-list-packages.el"
+;;;;;;  "el-get/el-get.el" "el-get/el-get.el" "el-get/el-get.el"
+;;;;;;  "el-get/el-get.el" "el-get/el-get.el" "el-get/el-get.el")
+;;;;;;  (23168 44284 529359 952000))
+
+;;;***
+
+;;;### (autoloads nil "powerline/powerline" "../../../../.emacs.d/el-get/powerline/powerline.el"
+;;;;;;  "75301790a2fec4284d8ee734d73cca14")
+;;; Generated autoloads from ../../../../.emacs.d/el-get/powerline/powerline.el
+
+(autoload 'powerline-hud "powerline/powerline" "\
+Return an XPM of relative buffer location using FACE1 and FACE2 of optional WIDTH.
+
+\(fn FACE1 FACE2 &optional WIDTH)" nil nil)
+
+(autoload 'powerline-mouse "powerline/powerline" "\
+Return mouse handler for CLICK-GROUP given CLICK-TYPE and STRING.
+
+\(fn CLICK-GROUP CLICK-TYPE STRING)" nil nil)
+
+(autoload 'powerline-concat "powerline/powerline" "\
+Concatonate STRINGS and pad sides by spaces.
+
+\(fn &rest STRINGS)" nil nil)
+
+(autoload 'defpowerline "powerline/powerline" "\
+Create function NAME by wrapping BODY with powerline padding an propetization.
+
+\(fn NAME BODY)" nil t)
+
+(autoload 'powerline-raw "powerline/powerline" "\
+Render STR as mode-line data using FACE and optionally PAD import on left (l) or right (r).
+
+\(fn STR &optional FACE PAD)" nil nil)
+
+(autoload 'powerline-fill "powerline/powerline" "\
+Return empty space using FACE and leaving RESERVE space on the right.
+
+\(fn FACE RESERVE)" nil nil)
+ (autoload 'powerline-major-mode "powerline")
+ (autoload 'powerline-minor-modes "powerline")
+ (autoload 'powerline-narrow "powerline")
+ (autoload 'powerline-vc "powerline")
+ (autoload 'powerline-encoding "powerline")
+ (autoload 'powerline-buffer-size "powerline")
+ (autoload 'powerline-buffer-id "powerline")
+ (autoload 'powerline-process "powerline")
+ (autoload 'powerline-selected-window-active "powerline")
+
+;;;***
+
+;;;### (autoloads nil nil ("../../../../.emacs.d/el-get/auto-complete/auto-complete-config.el"
+;;;;;;  "../../../../.emacs.d/el-get/auto-complete/auto-complete-config.el"
+;;;;;;  "../../../../.emacs.d/el-get/auto-complete/auto-complete.el"
+;;;;;;  "../../../../.emacs.d/el-get/auto-complete/auto-complete.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-autoloading.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-build.el" "../../../../.emacs.d/el-get/el-get/el-get-bundle.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-bundle.el" "../../../../.emacs.d/el-get/el-get/el-get-bundle.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-bundle.el" "../../../../.emacs.d/el-get/el-get/el-get-bundle.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-bundle.el" "../../../../.emacs.d/el-get/el-get/el-get-bundle.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-byte-compile.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-check.el" "../../../../.emacs.d/el-get/el-get/el-get-check.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-check.el" "../../../../.emacs.d/el-get/el-get/el-get-check.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-check.el" "../../../../.emacs.d/el-get/el-get/el-get-check.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-check.el" "../../../../.emacs.d/el-get/el-get/el-get-core.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-custom.el" "../../../../.emacs.d/el-get/el-get/el-get-dependencies.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-install.el" "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-methods.el" "../../../../.emacs.d/el-get/el-get/el-get-notify.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-recipes.el" "../../../../.emacs.d/el-get/el-get/el-get-status.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get.el" "../../../../.emacs.d/el-get/el-get/el-get.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get.el" "../../../../.emacs.d/el-get/el-get/el-get.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get.el" "../../../../.emacs.d/el-get/el-get/el-get.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get.el" "../../../../.emacs.d/el-get/emacs-async/async-bytecomp.el"
+;;;;;;  "../../../../.emacs.d/el-get/emacs-async/async.el" "../../../../.emacs.d/el-get/emacs-async/dired-async.el"
+;;;;;;  "../../../../.emacs.d/el-get/ghub/ghub.el" "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el" "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el" "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el" "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell.el" "../../../../.emacs.d/el-get/haskell-mode/haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell.el" "../../../../.emacs.d/el-get/haskell-mode/haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell.el" "../../../../.emacs.d/el-get/haskell-mode/haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
+;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
+;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
+;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
+;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
+;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
+;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
+;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/powerline/powerline-separators.el"
+;;;;;;  "../../../../.emacs.d/el-get/powerline/powerline-themes.el"
+;;;;;;  "../../../../.emacs.d/el-get/powerline/powerline-themes.el"
+;;;;;;  "../../../../.emacs.d/el-get/powerline/powerline.el" "../../../../.emacs.d/el-get/powerline/powerline.el"
+;;;;;;  "../../../../.emacs.d/el-get/systemd-mode/systemd.el" "../../../../.emacs.d/el-get/systemd-mode/systemd.el"
+;;;;;;  "../../../../.emacs.d/el-get/systemd-mode/systemd.el" "../../../../.emacs.d/el-get/systemd-mode/systemd.el"
+;;;;;;  "../../../../.emacs.d/el-get/systemd-mode/systemd.el" "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode-test.el"
+;;;;;;  "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
+;;;;;;  "el-get/el-get-bundle.el" "el-get/el-get-bundle.el" "el-get/el-get-bundle.el"
+;;;;;;  "el-get/el-get-bundle.el" "el-get/el-get-bundle.el" "el-get/el-get-bundle.el"
+;;;;;;  "el-get/el-get-bundle.el" "el-get/el-get-check.el" "el-get/el-get-check.el"
+;;;;;;  "el-get/el-get-check.el" "el-get/el-get-check.el" "el-get/el-get-check.el"
+;;;;;;  "el-get/el-get-check.el" "el-get/el-get-check.el" "el-get/el-get-list-packages.el"
+;;;;;;  "el-get/el-get-list-packages.el" "el-get/el-get-list-packages.el"
+;;;;;;  "el-get/el-get-list-packages.el" "el-get/el-get-list-packages.el"
+;;;;;;  "el-get/el-get-list-packages.el" "el-get/el-get-list-packages.el"
+;;;;;;  "el-get/el-get.el" "el-get/el-get.el" "el-get/el-get.el"
+;;;;;;  "el-get/el-get.el" "el-get/el-get.el" "el-get/el-get.el"
+;;;;;;  "el-get/el-get.el") (23168 43844 173682 885000))
+
+;;;***
+
+;;;### (autoloads nil "powerline/powerline-themes" "../../../../.emacs.d/el-get/powerline/powerline-themes.el"
+;;;;;;  "6661618a14c40766305a6ca50d5d2f31")
+;;; Generated autoloads from ../../../../.emacs.d/el-get/powerline/powerline-themes.el
+
+(autoload 'powerline-default-theme "powerline/powerline-themes" "\
+Setup the default mode-line.
+
+\(fn)" t nil)
+
+(autoload 'powerline-center-theme "powerline/powerline-themes" "\
+Setup a mode-line with major and minor modes centered.
+
+\(fn)" t nil)
+
+(autoload 'powerline-vim-theme "powerline/powerline-themes" "\
+Setup a Vim-like mode-line.
+
+\(fn)" t nil)
+
+(autoload 'powerline-nano-theme "powerline/powerline-themes" "\
+Setup a nano-like mode-line.
+
+\(fn)" t nil)
+
+;;;***
+
+;;;### (autoloads nil nil ("../../../../.emacs.d/el-get/auto-complete/auto-complete-config.el"
+;;;;;;  "../../../../.emacs.d/el-get/auto-complete/auto-complete-config.el"
+;;;;;;  "../../../../.emacs.d/el-get/auto-complete/auto-complete.el"
+;;;;;;  "../../../../.emacs.d/el-get/auto-complete/auto-complete.el"
+;;;;;;  "../../../../.emacs.d/el-get/dash/dash-functional.el" "../../../../.emacs.d/el-get/dash/dash.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-bundle.el" "../../../../.emacs.d/el-get/el-get/el-get-bundle.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-bundle.el" "../../../../.emacs.d/el-get/el-get/el-get-bundle.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-check.el" "../../../../.emacs.d/el-get/el-get/el-get-check.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-check.el" "../../../../.emacs.d/el-get/el-get/el-get-check.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get.el" "../../../../.emacs.d/el-get/el-get/el-get.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get.el" "../../../../.emacs.d/el-get/el-get/el-get.el"
+;;;;;;  "../../../../.emacs.d/el-get/emacs-async/async-bytecomp.el"
+;;;;;;  "../../../../.emacs.d/el-get/emacs-async/async.el" "../../../../.emacs.d/el-get/emacs-async/dired-async.el"
+;;;;;;  "../../../../.emacs.d/el-get/ghub/ghub.el" "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el" "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el" "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell.el" "../../../../.emacs.d/el-get/haskell-mode/haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell.el" "../../../../.emacs.d/el-get/haskell-mode/haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
+;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
+;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
+;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
+;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
+;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/popup/popup.el" "../../../../.emacs.d/el-get/powerline/powerline-themes.el"
+;;;;;;  "../../../../.emacs.d/el-get/powerline/powerline-themes.el"
+;;;;;;  "../../../../.emacs.d/el-get/powerline/powerline.el" "../../../../.emacs.d/el-get/powerline/powerline.el"
+;;;;;;  "../../../../.emacs.d/el-get/systemd-mode/systemd.el" "../../../../.emacs.d/el-get/systemd-mode/systemd.el"
+;;;;;;  "../../../../.emacs.d/el-get/systemd-mode/systemd.el" "../../../../.emacs.d/el-get/systemd-mode/systemd.el"
+;;;;;;  "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/with-editor/with-editor.el"
+;;;;;;  "el-get/el-get-bundle.el" "el-get/el-get-bundle.el" "el-get/el-get-bundle.el"
+;;;;;;  "el-get/el-get-bundle.el" "el-get/el-get-check.el" "el-get/el-get-check.el"
+;;;;;;  "el-get/el-get-check.el" "el-get/el-get-check.el" "el-get/el-get-list-packages.el"
+;;;;;;  "el-get/el-get-list-packages.el" "el-get/el-get-list-packages.el"
 ;;;;;;  "el-get/el-get-list-packages.el" "el-get/el-get.el" "el-get/el-get.el"
-;;;;;;  "el-get/el-get.el") (23162 24746 644153 657000))
+;;;;;;  "el-get/el-get.el" "el-get/el-get.el") (23168 44287 855463
+;;;;;;  257000))
 
 ;;;***
 
@@ -1854,126 +2503,121 @@ Key bindings:
 
 ;;;***
 
-;;;### (autoloads nil nil ("../../../../.emacs.d/el-get/el-get/el-get-autoloading.el"
-;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-build.el" "../../../../.emacs.d/el-get/el-get/el-get-bundle.el"
+;;;### (autoloads nil nil ("../../../../.emacs.d/el-get/auto-complete/auto-complete-config.el"
+;;;;;;  "../../../../.emacs.d/el-get/auto-complete/auto-complete-config.el"
+;;;;;;  "../../../../.emacs.d/el-get/auto-complete/auto-complete.el"
+;;;;;;  "../../../../.emacs.d/el-get/auto-complete/auto-complete.el"
 ;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-bundle.el" "../../../../.emacs.d/el-get/el-get/el-get-bundle.el"
-;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-bundle.el" "../../../../.emacs.d/el-get/el-get/el-get-byte-compile.el"
 ;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-check.el" "../../../../.emacs.d/el-get/el-get/el-get-check.el"
-;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-check.el" "../../../../.emacs.d/el-get/el-get/el-get-check.el"
-;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-core.el" "../../../../.emacs.d/el-get/el-get/el-get-custom.el"
-;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-dependencies.el"
-;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-install.el" "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
 ;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
 ;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
-;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
-;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-methods.el" "../../../../.emacs.d/el-get/el-get/el-get-notify.el"
-;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-recipes.el" "../../../../.emacs.d/el-get/el-get/el-get-status.el"
 ;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get.el" "../../../../.emacs.d/el-get/el-get/el-get.el"
-;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get.el" "../../../../.emacs.d/el-get/el-get/el-get.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el" "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el"
+;;;;;;  "../../../../.emacs.d/el-get/emacs-async/async-bytecomp.el"
+;;;;;;  "../../../../.emacs.d/el-get/emacs-async/async-bytecomp.el"
+;;;;;;  "../../../../.emacs.d/el-get/emacs-async/async-pkg.el" "../../../../.emacs.d/el-get/emacs-async/async-test.el"
+;;;;;;  "../../../../.emacs.d/el-get/emacs-async/async.el" "../../../../.emacs.d/el-get/emacs-async/async.el"
+;;;;;;  "../../../../.emacs.d/el-get/emacs-async/dired-async.el"
+;;;;;;  "../../../../.emacs.d/el-get/emacs-async/dired-async.el"
+;;;;;;  "../../../../.emacs.d/el-get/emacs-async/smtpmail-async.el"
+;;;;;;  "../../../../.emacs.d/el-get/ghub/ghub.el" "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el" "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell.el" "../../../../.emacs.d/el-get/haskell-mode/haskell.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell.el" "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
 ;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
 ;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
-;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/git-commit.el" "../../../../.emacs.d/el-get/magit/lisp/git-rebase.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-apply.el" "../../../../.emacs.d/el-get/magit/lisp/magit-autoloads.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-autorevert.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-bisect.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-blame.el" "../../../../.emacs.d/el-get/magit/lisp/magit-bookmark.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-branch.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-collab.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-commit.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-core.el" "../../../../.emacs.d/el-get/magit/lisp/magit-diff.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-ediff.el" "../../../../.emacs.d/el-get/magit/lisp/magit-extras.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-files.el" "../../../../.emacs.d/el-get/magit/lisp/magit-git.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-imenu.el" "../../../../.emacs.d/el-get/magit/lisp/magit-log.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-margin.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-merge.el" "../../../../.emacs.d/el-get/magit/lisp/magit-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-notes.el" "../../../../.emacs.d/el-get/magit/lisp/magit-obsolete.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-pkg.el" "../../../../.emacs.d/el-get/magit/lisp/magit-process.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-refs.el" "../../../../.emacs.d/el-get/magit/lisp/magit-remote.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-repos.el" "../../../../.emacs.d/el-get/magit/lisp/magit-reset.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-section.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-sequence.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-stash.el" "../../../../.emacs.d/el-get/magit/lisp/magit-status.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-submodule.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-subtree.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-tag.el" "../../../../.emacs.d/el-get/magit/lisp/magit-utils.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit-wip.el" "../../../../.emacs.d/el-get/magit/lisp/magit-worktree.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit/lisp/magit.el" "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
-;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/powerline/powerline-themes.el"
+;;;;;;  "../../../../.emacs.d/el-get/powerline/powerline-themes.el"
+;;;;;;  "../../../../.emacs.d/el-get/powerline/powerline.el" "../../../../.emacs.d/el-get/powerline/powerline.el"
 ;;;;;;  "../../../../.emacs.d/el-get/systemd-mode/systemd.el" "../../../../.emacs.d/el-get/systemd-mode/systemd.el"
-;;;;;;  "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode-test.el"
 ;;;;;;  "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
-;;;;;;  "el-get/el-get-bundle.el" "el-get/el-get-bundle.el" "el-get/el-get-bundle.el"
-;;;;;;  "el-get/el-get-bundle.el" "el-get/el-get-check.el" "el-get/el-get-check.el"
-;;;;;;  "el-get/el-get-check.el" "el-get/el-get-check.el" "el-get/el-get-list-packages.el"
-;;;;;;  "el-get/el-get-list-packages.el" "el-get/el-get-list-packages.el"
-;;;;;;  "el-get/el-get-list-packages.el" "el-get/el-get.el" "el-get/el-get.el"
-;;;;;;  "el-get/el-get.el" "el-get/el-get.el") (23162 24771 262823
-;;;;;;  190000))
+;;;;;;  "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
+;;;;;;  "el-get/el-get-bundle.el" "el-get/el-get-bundle.el" "el-get/el-get-check.el"
+;;;;;;  "el-get/el-get-check.el" "el-get/el-get-list-packages.el"
+;;;;;;  "el-get/el-get-list-packages.el" "el-get/el-get.el" "el-get/el-get.el")
+;;;;;;  (23168 44310 593169 470000))
 
 ;;;***
 
@@ -2010,44 +2654,96 @@ See `wakatime-mode' for more information on Wakatime mode.
 
 ;;;***
 
-;;;### (autoloads nil nil ("../../../../.emacs.d/el-get/el-get/el-get-bundle.el"
-;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-check.el" "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
-;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get.el" "../../../../.emacs.d/el-get/go-mode/go-guru.el"
-;;;;;;  "../../../../.emacs.d/el-get/go-mode/go-mode.el" "../../../../.emacs.d/el-get/go-mode/go-rename.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el" "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
+;;;### (autoloads nil nil ("../../../../.emacs.d/el-get/auto-complete/auto-complete-config.el"
+;;;;;;  "../../../../.emacs.d/el-get/auto-complete/auto-complete-config.el"
+;;;;;;  "../../../../.emacs.d/el-get/auto-complete/auto-complete.el"
+;;;;;;  "../../../../.emacs.d/el-get/auto-complete/auto-complete.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-bundle.el" "../../../../.emacs.d/el-get/el-get/el-get-bundle.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-check.el" "../../../../.emacs.d/el-get/el-get/el-get-check.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get-list-packages.el"
+;;;;;;  "../../../../.emacs.d/el-get/el-get/el-get.el" "../../../../.emacs.d/el-get/el-get/el-get.el"
+;;;;;;  "../../../../.emacs.d/el-get/emacs-async/async-bytecomp.el"
+;;;;;;  "../../../../.emacs.d/el-get/emacs-async/async-bytecomp.el"
+;;;;;;  "../../../../.emacs.d/el-get/emacs-async/async.el" "../../../../.emacs.d/el-get/emacs-async/async.el"
+;;;;;;  "../../../../.emacs.d/el-get/emacs-async/dired-async.el"
+;;;;;;  "../../../../.emacs.d/el-get/emacs-async/dired-async.el"
+;;;;;;  "../../../../.emacs.d/el-get/ghub/ghub.el" "../../../../.emacs.d/el-get/git-gutter/git-gutter.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el" "../../../../.emacs.d/el-get/haskell-mode/ghc-core.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/ghci-script-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-align-imports.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-c2hs.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-cabal.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-collapse.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-commands.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-compile.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-completions.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-customize.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-debug.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-decl-scan.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-doc.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-font-lock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-hoogle.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indent.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-indentation.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-interactive-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-load.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-menu.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-mode.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-modules.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-move-nested.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-navigate-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-session.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-sort-imports.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
-;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell.el" "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell-unicode-input-method.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/haskell.el" "../../../../.emacs.d/el-get/haskell-mode/haskell.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/highlight-uses-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/inf-haskell.el"
 ;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
+;;;;;;  "../../../../.emacs.d/el-get/haskell-mode/w3m-haddock.el"
 ;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
+;;;;;;  "../../../../.emacs.d/el-get/highlight-symbol/highlight-symbol.el"
+;;;;;;  "../../../../.emacs.d/el-get/magit-popup/magit-popup.el"
 ;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
-;;;;;;  "../../../../.emacs.d/el-get/systemd-mode/systemd.el" "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
-;;;;;;  "el-get/el-get-bundle.el" "el-get/el-get-check.el" "el-get/el-get-list-packages.el"
-;;;;;;  "el-get/el-get.el") (23163 11922 752311 550000))
+;;;;;;  "../../../../.emacs.d/el-get/markdown-mode/markdown-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/powerline/powerline-themes.el"
+;;;;;;  "../../../../.emacs.d/el-get/powerline/powerline-themes.el"
+;;;;;;  "../../../../.emacs.d/el-get/powerline/powerline.el" "../../../../.emacs.d/el-get/powerline/powerline.el"
+;;;;;;  "../../../../.emacs.d/el-get/systemd-mode/systemd.el" "../../../../.emacs.d/el-get/systemd-mode/systemd.el"
+;;;;;;  "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
+;;;;;;  "../../../../.emacs.d/el-get/wakatime-mode/wakatime-mode.el"
+;;;;;;  "el-get/el-get-bundle.el" "el-get/el-get-bundle.el" "el-get/el-get-check.el"
+;;;;;;  "el-get/el-get-check.el" "el-get/el-get-list-packages.el"
+;;;;;;  "el-get/el-get-list-packages.el" "el-get/el-get.el" "el-get/el-get.el")
+;;;;;;  (23168 45538 153301 761000))
 
 ;;;***
 

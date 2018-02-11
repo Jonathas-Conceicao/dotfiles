@@ -26,6 +26,9 @@
 				haskell-mode
 				systemd-mode
 				go-mode
+				auto-complete
+				powerline
+				git-gutter
 ))
 
 (el-get 'sync my:el-get-packages)
@@ -153,10 +156,19 @@
 ;; (require 'auto-complete-config)
 ;; (add-to-list 'load-path "~/.emacs.d/golang/")
 
+;; Enables auto complete
+(ac-config-default)
+
+;; Enables powerline with default profile
+(require 'powerline)
+(powerline-default-theme)
+
+(require 'git-gutter)
+(global-git-gutter-mode +1)
+
 ;; Go fmt on save
 (add-hook 'before-save-hook #'gofmt-before-save) ;; Runs go fmt after save
 
-;; (ac-config-default)
 (put 'upcase-region 'disabled nil)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
