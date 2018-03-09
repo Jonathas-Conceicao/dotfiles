@@ -53,7 +53,7 @@
 												(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation))))
  (highlight-symbol status "installed" recipe
 									 (:name highlight-symbol :description "Quickly highlight a symbol throughout the buffer and cycle through its locations." :type github :pkgname "nschum/highlight-symbol.el"))
- (let-alist status "installed" recipe
+ (let-alist status "required" recipe
 						(:name let-alist :description "Easily let-bind values of an assoc-list by their names." :builtin "25.0.50" :type elpa :website "https://elpa.gnu.org/packages/let-alist.html"))
  (magit-popup status "installed" recipe
 							(:name magit-popup :website "https://github.com/magit/magit-popup" :description "Define prefix-infix-suffix command combos" :type github :pkgname "magit/magit-popup" :depends
@@ -62,6 +62,10 @@
 								(:name markdown-mode :description "Major mode to edit Markdown files in Emacs" :website "http://jblevins.org/projects/markdown-mode/" :type github :pkgname "jrblevin/markdown-mode" :prepare
 											 (add-to-list 'auto-mode-alist
 																		'("\\.\\(md\\|mdown\\|markdown\\)\\'" . markdown-mode))))
+ (markdown-preview-mode status "installed" recipe
+												(:name markdown-preview-mode :description "Markdown preview mode with websocket.el" :type github :depends
+															 (websocket markdown-mode uuidgen web-server)
+															 :website "https://github.com/ancane/markdown-preview-mode.git" :pkgname "ancane/markdown-preview-mode"))
  (popup status "installed" recipe
 				(:name popup :website "https://github.com/auto-complete/popup-el" :description "Visual Popup Interface Library for Emacs" :type github :submodule nil :depends cl-lib :pkgname "auto-complete/popup-el"))
  (powerline status "installed" recipe
@@ -70,7 +74,13 @@
 									 :description "Powerline for Emacs" :type github :pkgname "milkypostman/powerline" :load-path "." :features powerline))
  (systemd-mode status "installed" recipe
 							 (:name systemd-mode :description "Major mode for editing systemd units" :type github :pkgname "holomorph/systemd-mode"))
+ (uuidgen status "installed" recipe
+					(:name uuidgen :website "https://github.com/kanru/uuidgen-el#readme" :description "Provides various UUID generating functions" :type github :pkgname "kanru/uuidgen-el" :library uuidgen))
  (wakatime-mode status "installed" recipe
 								(:name wakatime-mode :description "Automatic time tracking extension for WakaTime" :website "https://github.com/wakatime/wakatime-mode" :type github :pkgname "wakatime/wakatime-mode"))
+ (web-server status "installed" recipe
+						 (:name web-server :description "web server running Emacs Lisp handlers" :type github :pkgname "eschulte/emacs-web-server"))
+ (websocket status "installed" recipe
+						(:name websocket :description "A websocket implementation in elisp, for emacs." :type github :pkgname "ahyatt/emacs-websocket"))
  (with-editor status "installed" recipe
 							(:name with-editor :description "Use the Emacsclient as $EDITOR" :type github :pkgname "magit/with-editor")))
