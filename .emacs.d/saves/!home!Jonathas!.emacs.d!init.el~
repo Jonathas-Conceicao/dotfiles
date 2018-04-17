@@ -19,7 +19,6 @@
 
 ;; Habilitar acentos ortográficos
 (set-keyboard-coding-system 'utf-8)
-(require 'iso-transl)
 
 ;; My el-get package list, must be ketpet up-to-date
 (setq my:el-get-packages
@@ -30,7 +29,6 @@
 				auto-complete
 				powerline
 				git-gutter
-				flyspell
 ))
 
 (el-get 'sync my:el-get-packages)
@@ -158,15 +156,6 @@
 ;; (require 'auto-complete-config)
 ;; (add-to-list 'load-path "~/.emacs.d/golang/")
 
-;; Enables flyspell
-(require 'flyspell)
-
-;; Avoid flyspell slowdown
-(setq flyspell-issue-message-flag nil)
-
-;; Flyspell for latex
-(add-hook 'LaTeX-mode-hook #'turn-on-flyspell)
-
 ;; Enables auto complete
 (ac-config-default)
 
@@ -186,7 +175,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (gdscript-mode atom-one-dark-theme)))
+ '(package-selected-packages (quote (atom-one-dark-theme)))
  '(safe-local-variable-values (quote ((buffer-file-coding-system . utf-8-unix)))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

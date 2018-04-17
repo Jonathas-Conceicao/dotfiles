@@ -1,0 +1,337 @@
+\documentclass[10pt]{beamer}
+%\usepackage{fancyvrb}
+\usepackage{times}
+%\usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps}
+\usepackage{amsmath,amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{colortbl}
+\usepackage[portuges]{babel}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{pxfonts,txfonts}
+\usepackage{url}
+\usefonttheme{structurebold}
+
+%==================================================================================
+
+\definecolor{DarkGreen}{rgb}{0,.5,0}
+\definecolor{DarkRed}{rgb}{.5,0,0}
+\definecolor{DarkBlue}{rgb}{0,0,.5}
+
+\newcommand{\x}{\textbf{\textcolor{DarkGreen}{$\surd$}}}
+\newcommand{\xx}{\textbf{\textcolor{DarkBlue}{$\odot$}}}
+\newcommand{\xxx}{\textbf{\textcolor{DarkRed}{$\times$}}}
+%==================================================================================
+
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Programa}
+
+\lstset{
+	numbers=left,
+	stepnumber=1,
+	firstnumber=1,
+	numberstyle=\tiny,
+	extendedchars=true,
+	breaklines=true,
+	frame=tb,
+	basicstyle=\footnotesize,
+	stringstyle=\ttfamily,
+	showstringspaces=false
+}
+
+\lstdefinelanguage{Cmm}{%
+	language = C,
+	morekeywords = {ccall, call, jump,
+									INFO_TABLE_RET, P_, W_, StgTSO_trec
+								 }
+}
+
+%==================================================================================
+
+\usetheme{Amsterdam}
+
+%==================================================================================
+
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+
+% inserir logotipo a apresentação
+\logo{\includegraphics[height=.5cm]{imagens/lups_oficial.png}}
+%\setbeameroption{hide notes}
+%==================================================================================
+
+\title[Implementação ao GHC]{
+  Transactional Boosting numa Linguagem Puramente Funcional
+}
+\author[Jonathas Conceição]{
+	\textbf{Jonathas A. O. Conceição} \nl
+	Orientação: Dr. André R. Du Bois
+}
+\institute[UFPel]{Universidade Federal de Pelotas \nl
+	CDTEC - CC\nl
+	WEIT 2017
+}
+
+\date[WEIT 2017]{Outubro - 2017  - Santa Maria/RS}
+
+%==================================================================================
+
+\begin{document}
+\frame[label=titlepage]{
+	\titlepage
+}
+
+%==================================================================================
+
+\frame{
+	\frametitle{Sumário}
+	\tableofcontents
+}
+
+%==================================================================================
+
+\section{Introdução}
+
+%==================================================================================
+
+\frame{
+	\frametitle{Introdução}
+	\scriptsize
+
+	\begin{block}{\textbf{Programação Funcional}}
+		\begin{itemize}
+			\item Código aberto;
+			\item Código roda junto ao RunTime System;
+			\item Possui uma implementação de STM.
+		\end{itemize}
+	\end{block}
+
+	\begin{block}{\textbf{Software Transactional Memory(STM)}}
+		\begin{itemize}
+			\item Simplificação da programação;
+			\item Controle feito pela máquina;
+			\item Evita DeadLocks.
+		\end{itemize}
+	\end{block}
+}
+
+\frame{
+	\frametitle{Introdução}
+	\scriptsize
+
+	\begin{block}{\textbf{Glasgow Haskell Compiler(GHC)}}
+		\begin{itemize}
+			\item Código aberto;
+			\item Código roda junto ao RunTime System;
+			\item Possui uma implementação de STM.
+		\end{itemize}
+	\end{block}
+
+	\begin{block}{\textbf{Software Transactional Memory(STM)}}
+		\begin{itemize}
+			\item Simplificação da programação;
+			\item Controle feito pela máquina;
+			\item Evita DeadLocks.
+		\end{itemize}
+	\end{block}
+}
+
+
+%==================================================================================
+
+\section{Transactional Boosting}
+
+%==================================================================================
+
+\frame{
+	\frametitle{Software Transactional Memory}
+	\scriptsize
+
+	\begin{block}{Software Transactional Memory}
+		\begin{itemize}
+			\item Registro de mudança da memória;
+			\item \textit{Commit}/\textit{Abort};
+			\item Conflitos de Escrita/Leitura.
+		\end{itemize}
+	\end{block}
+
+	\begin{block}{Transactional Boost}
+		\begin{itemize}
+			\item Linearmente concorrentes para transaccionalmente concorrentes;
+			\item Restrição. A ação precisa ter uma operação inversa.
+		\end{itemize}
+	\end{block}
+
+}
+
+\frame{
+	\frametitle{Primitiva}
+	\scriptsize
+
+	\begin{block}{Protótipo}
+		% $boost :: IO (Maybe\ a)\ $ -\textgreater $\ ((Maybe\ a)$ -\textgreater $\ IO())\ $ -\textgreater $\ IO()\ $ -\textgreater $\ STM\ a$
+		% \lstinputlisting[firstline=1, lastline=1, frame=none, numbers=none, xleftmargin=3.0ex]{sourceCode/Primitive.hs}
+		\lstinputlisting[firstline=1, lastline=1, frame=none, xleftmargin=6.0ex]{sourceCode/Primitive.hs}
+	\end{block}
+
+	\begin{block}{Boost}
+		%Dentro desta função tanto conflitos quanto os registros à memória são tratados logo que são encontrados.
+		Argumentos:
+		\begin{itemize}
+		  \item Uma ação (do tipo $IO (Maybe\ a)\ $), a função original que vai ser executada;
+		  \item Um ação de desfazer(do tipo $a$ -\textgreater $\ IO())$), usada para reverter a ação executada em caso de abort;
+		  \item Um \textit{commit}(do tipo $IO()$), que é usado para tornar público a ação feita pela versão \textit{boosted} da função original.
+		\end{itemize}
+		Retornado a ação encapsulada.
+	\end{block}
+
+}
+
+%==================================================================================
+
+\section{Implemenetação}
+
+%==================================================================================
+
+\frame{
+	\frametitle{Baixo Nível do GHC}
+	\scriptsize
+
+	\begin{block}{RunTime System(RTS)}
+		\begin{itemize}
+			\item Roda juntamente à um código do GHC.
+			\item Suporte a funcionalidades como:
+			\begin{itemize}
+				\scriptsize
+				\item Garbage Collector;
+				\item Transações;
+				\item Exceções;
+				\item Escalonamento;
+				\item Controle de Concorrência;
+			\end{itemize}
+		\end{itemize}
+	\end{block}
+
+	% \begin{block}{Code Generator}
+	% 	\begin{itemize}
+	% 		\item Ligação entre Haskell e o RTS
+	% 	\end{itemize}
+	% \end{block}
+}
+
+\frame{
+	\frametitle{Implementações Necessárias}
+	\scriptsize
+	\begin{block}{Primitive Operations(PrimOps)}
+		\begin{itemize}
+			\item Funções não implementadas em Haskell;
+			\item Dois tipos de implementação:
+			\begin{itemize}
+				\scriptsize
+				\item \textit{In-line}: Códigos curtos que não precisam alocar, bloquear, ou retorno do escalonador;
+				\item \textit{Out-of-line}: Códigos implementados diretamente ao RTS;
+			\end{itemize}
+			\item Funções do STM.
+		\end{itemize}
+	\end{block}
+
+	\begin{block}{Heap Object}
+		\begin{columns}[T]
+			\begin{column}{.4\textwidth}
+				\begin{itemize}
+					\item \textit{Info table}
+					\item \textit{Code}
+					\item \textit{Payload}
+					% \item \textit{AtomicallyFrame}
+					\item \textit{StgBoostSTMFrame}
+				\end{itemize}
+			\end{column}
+			\begin{column}{.5\textwidth}
+				\includegraphics[width=0.65\textwidth]{imagens/HeapObject.png}
+			\end{column}
+		\end{columns}
+	\end{block}
+}
+
+\frame{
+	\frametitle{Implementação}
+	\scriptsize
+
+	% \begin{block}{Antigo Atomically Frame}
+	% 	\lstinputlisting[lastline=6, frame=none, xleftmargin=3.0ex]{sourceCode/NewFrame.h}
+	% \end{block}
+	% \begin{block}{Novo Atomically Frame}
+	% 	\lstinputlisting[firstline=7, lastline=14, frame=none, xleftmargin=3.0ex]{sourceCode/NewFrame.h}
+	% \end{block}
+
+	\begin{block}{Novo HeapObject}
+		\lstinputlisting[language=C, firstline=15, lastline=22, frame=none, xleftmargin=4.0ex]{sourceCode/NewFrame.h}
+	\end{block}
+
+	\begin{block}{Execution PrimOp}
+		% \lstinputlisting[firstline=2, lastline=2, frame=none, numbers=none, xleftmargin=3.0ex]{sourceCode/Primitive.hs}
+		\lstinputlisting[language=Haskell, firstline=2, lastline=2, frame=none, xleftmargin=4.0ex]{sourceCode/Primitive.hs}
+	\end{block}
+	\begin{block}{Abort PrimOp}
+		% \lstinputlisting[firstline=3, lastline=3, frame=none, numbers=none, xleftmargin=3.0ex]{sourceCode/Primitive.hs}
+		\lstinputlisting[language=Haskell, firstline=3, lastline=3, frame=none, xleftmargin=4.0ex]{sourceCode/Primitive.hs}
+	\end{block}
+
+}
+
+\frame{
+	\frametitle{Implementação}
+	\scriptsize
+	\begin{block}{Stack Frame Code}
+		\lstinputlisting[language=Cmm, frame=none, xleftmargin=4.0ex]{sourceCode/InfoTableCode.cmm}
+	\end{block}
+}
+
+%====================================================================================
+
+\section{Considerações Finais}
+
+%==================================================================================
+
+\frame{
+	\frametitle{Conclusão}
+	\scriptsize
+	\begin{block}{Resultados Parciais Alcançados}
+		\begin{itemize}
+			\item Procedimento para implementação;
+			\item Funcionamento do STM interno ao RTS;
+			\item Criação do \textit{StgBoostSTMFrame}.
+			\item PrimOps para execução da primitiva.
+			\item Tratamento para execução do \textit{commit} da primitiva.
+			% \item Extensão do \textit{AtomicallyFrame}.
+		\end{itemize}
+	\end{block}
+
+	\begin{block}{Passos Futuros}
+		\begin{itemize}
+			\item Implementar a função de abort.
+			\item Teste de desempenho.
+		\end{itemize}
+	\end{block}
+}
+
+\frame{
+	\frametitle{Dúvidas?}
+
+	\begin{itemize}
+	  \item Grupo de Pesquisa: LUPS
+	\end{itemize}
+
+	\begin{block}{Mais informações:}
+		\textbf{E-mail:} \texttt{jadoliveira@inf.ufpel.edu.br}
+	\end{block}
+}
+
+%==================================================================================
+%==================================================================================
+
+\end{document}
+
+%==================================================================================
+%==================================================================================
