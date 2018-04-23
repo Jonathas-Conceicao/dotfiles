@@ -1,7 +1,0 @@
-module Tipo where
-
-data Tipo
-  = VOID
-  = BOOL
-  = INT
-  deriving (Eq, Show)
