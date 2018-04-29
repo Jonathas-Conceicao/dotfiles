@@ -1,5 +1,2 @@
 *.un~
-.emacs.d/auto-save-list/*
-.emacs.d/save/*
-.emacs.d/history
-
+.cgdb/readline_history.txt
