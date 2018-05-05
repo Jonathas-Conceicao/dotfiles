@@ -5,7 +5,7 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
-#Enable Extended pattern matching in bash
+# Enable Extended pattern matching in bash
 shopt -s extglob
 
 # User specific global variables
