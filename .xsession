@@ -4,6 +4,11 @@
 bgFile="$HOME/.xmonad/res/Wallpaper/current"
 feh --bg-scale $bgFile
 
+# Turn off system bell if on display
+if [ -n "$DISPLAY" ]; then
+	xset b off
+fi
+
 # Setup the Monitors resulition
 hn=$(eval cat /etc/hostname)
 if [ "$hn" = "lups06" ]; then

@@ -1,8 +1,8 @@
 # .bashrc
 
 # Source global definitions
-if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
+if [ -f /etc/*bashrc ]; then
+	. /etc/*bashrc
 fi
 
 # Enable Extended pattern matching in bash
