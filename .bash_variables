@@ -29,6 +29,10 @@ export PS1="[\[$(tput sgr0)\]\[\033[38;5;93m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\
 # Path
 export PATH="/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/Jonathas/.local/bin:/home/jonathas/.local/bin:/home/Jonathas/.local/bin:/opt/bin:/opt/android-ndk-r14b"
 
+# Default editor
+export VISUAL=vim
+export EDITOR="$VISUAL"
+
 # ClassPath for Java
 export CLASSPATH=.:/opt/ClassPath/*
 
