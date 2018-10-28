@@ -11,4 +11,6 @@ alias ll="ls -l"
 
 alias buscadorGHC="grepR"
 alias mangaReader="mcomix"
+
 alias Minecraft="primusrun java -Xmx5G -Xms5G -jar /opt/Minecraft/Minecraft.jar"
+alias MineClick="MINE_WINDOW=$(xdotool search --onlyvisible --name Minecraft);while true; do xdotool click --window $MINE_WINDOW --repeat 5 --delay 400 3; done"
