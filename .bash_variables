@@ -23,18 +23,18 @@ export WHITE='\033[01;37m'
 export COLORLIST=(${DEFAULT} ${RED} ${GREEN} ${YELLOW} ${BLUE} ${PURPLE} ${CYAN} ${LIGHTGRAY} ${LRED} ${LGREEN} ${LYELLOW} ${LBLUE} ${LPURPLE} ${LCYAN} ${WHITE})
 export COLORLISTNAME=("DEFAULT" "RED" "GREEN" "YELLOW" "BLUE" "PURPLE" "CYAN" "LIGHTGRAY" "LRED" "LGREEN" "LYELLOW" "LBLUE" "LPURPLE" "LCYAN" "WHITE")
 
-# PS1 style
-export PS1="[\[$(tput sgr0)\]\[\033[38;5;93m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput sgr0)\]\[\033[38;5;34m\]\h\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]\[\033[38;5;33m\]\w\[$(tput sgr0)\]\[\033[38;5;15m\]]\n\[$(tput sgr0)\]\[\033[38;5;34m\]\\$>\[$(tput sgr0)\]"
+# PS1 style (Dracula based)
+export PS1="[\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;123m\]\u\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;84m\]\h\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;183m\]\w\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]]\n\[$(tput sgr0)\]\[\033[38;5;10m\]\\$>\[$(tput sgr0)\]"
 
 # Path
 export PATH="/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/Jonathas/.local/bin:/home/jonathas/.local/bin:/home/Jonathas/.local/bin:/opt/bin:/opt/android-ndk-r14b"
 
 # Default editor
-export VISUAL=vim
-export EDITOR="$VISUAL"
+export VISUAL=emacs
+export EDITOR="emacs -nw"
 
 # ClassPath for Java
-export CLASSPATH=.:/opt/ClassPath/*
+export CLASSPATH=$CLASSPATH:/opt/ClassPath/*:/usr/share/java/*
 
 # GO Paths for GO Lang
 export GOPATH=$HOME/go

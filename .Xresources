@@ -1,0 +1,34 @@
+! Fonts
+xterm*faceName: DejaVu Sans Mono Book
+xterm*faceSize: 12
+
+! Every shell is a login shell by default
+xterm*loginshell: true
+
+! Send scape for Emacs-like keystrokes
+xterm*metaSendsEscape: true
+
+! Keys for copy and paste to clipboard
+xterm*VT100.Translations: #override \
+	Ctrl Shift <Key>V: insert-selection(CLIPBOARD) \n\
+	Ctrl Shift <Key>C: copy-selection(CLIPBOARD)
+
+! Dracula Xresources palette (modified !*)
+*.foreground: #F8F8F2
+*.background: #282A36
+*.color0:     #000000
+*.color8:     #4D4D4D
+*.color1:     #FF5555
+*.color9:     #FF6E67
+*.color2:     #5FFF87 !*
+*.color10:    #5AF78E
+*.color3:     #F1FA8C
+*.color11:    #F4F99D
+*.color4:     #D7AFFF !*
+*.color12:    #CAA9FA
+*.color5:     #FF79C6
+*.color13:    #FF92D0
+*.color6:     #87FFFF !*
+*.color14:    #9AEDFE
+*.color7:     #BFBFBF
+*.color15:    #E6E6E6
