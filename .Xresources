@@ -13,6 +13,13 @@ xterm*VT100.Translations: #override \
 	Ctrl Shift <Key>V: insert-selection(CLIPBOARD) \n\
 	Ctrl Shift <Key>C: copy-selection(CLIPBOARD)
 
+! Log scroll
+xterm*savelines: 16384
+
+! Right side scroll bar
+xterm*rightScrollBar: true
+xterm*ScrollBar: true
+
 ! Dracula Xresources palette (modified !*)
 *.foreground: #F8F8F2
 *.background: #282A36
@@ -32,3 +39,4 @@ xterm*VT100.Translations: #override \
 *.color14:    #9AEDFE
 *.color7:     #BFBFBF
 *.color15:    #E6E6E6
+
