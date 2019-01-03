@@ -7,10 +7,9 @@ alias ghci-beta="ghc-beta --interactive"
 
 alias ls="ls --color=auto"
 alias ll="ls -l"
-#alias grep="grep -n --colour"
+alias grep="grep --color=auto"
+alias grepR="grep -rnI"
 
-alias buscadorGHC="grepR"
-alias mangaReader="mcomix"
+alias emacsnw="env TERM=xterm-256color emacs -nw"
 
 alias Minecraft="primusrun java -Xmx5G -Xms5G -jar /opt/Minecraft/Minecraft.jar"
-alias MineClick="MINE_WINDOW=$(xdotool search --onlyvisible --name Minecraft);while true; do xdotool click --window $MINE_WINDOW 3;sleep 0.5s; done"

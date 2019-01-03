@@ -45,9 +45,5 @@ export PATH=$PATH:$GOBIN
 export WORKSPACE=$HOME/Workspace
 export MYGHC=$WORKSPACE/ghc/
 
-# Android Things
-export NDK=/opt/android-ndk-r14b
-export ANDROID_HOME=$HOME/Android/Sdk
-
 # Format hisyory file to show date and time
 HISTTIMEFORMAT="%d/%m/%y %T "

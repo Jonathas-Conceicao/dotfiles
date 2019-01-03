@@ -25,7 +25,7 @@ fi
 
 # enable programmable completion features
 if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
+	. /etc/bash_completion
 fi
 
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
