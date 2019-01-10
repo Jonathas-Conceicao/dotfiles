@@ -8,13 +8,17 @@ xterm*loginshell: true
 ! Send scape for Emacs-like keystrokes
 xterm*metaSendsEscape: true
 
-! Keys for copy and paste to clipboard
+! Log scroll
+xterm*savelines: 18313
+
+! Some extra keys
 xterm*VT100.Translations: #override \
 	Ctrl Shift <Key>V: insert-selection(CLIPBOARD) \n\
-	Ctrl Shift <Key>C: copy-selection(CLIPBOARD)
-
-! Log scroll
-xterm*savelines: 16384
+	Ctrl Shift <Key>C: copy-selection(CLIPBOARD) \n\
+	Shift <Key>Up: scroll-back(1) \n\
+	Shift <Key>Down: scroll-forw(1) \n\
+	Shift <Key>Home: scroll-back(18313) \n\
+	Shift <Key>End: scroll-forw(18313)
 
 ! Right side scroll bar
 xterm*rightScrollBar: true
