@@ -5,6 +5,9 @@ xterm*faceSize: 12
 ! Every shell is a login shell by default
 xterm*loginshell: true
 
+! Notify WM of urgency on bell
+XTerm.VT100.bellIsUrgent: true
+
 ! Send scape for Emacs-like keystrokes
 xterm*metaSendsEscape: true
 

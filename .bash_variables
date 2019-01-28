@@ -1,3 +1,4 @@
+#! /bin/bash
 # User specific global variables
 
 # Color Variables
@@ -23,8 +24,11 @@ export WHITE='\033[01;37m'
 export COLORLIST=(${DEFAULT} ${RED} ${GREEN} ${YELLOW} ${BLUE} ${PURPLE} ${CYAN} ${LIGHTGRAY} ${LRED} ${LGREEN} ${LYELLOW} ${LBLUE} ${LPURPLE} ${LCYAN} ${WHITE})
 export COLORLISTNAME=("DEFAULT" "RED" "GREEN" "YELLOW" "BLUE" "PURPLE" "CYAN" "LIGHTGRAY" "LRED" "LGREEN" "LYELLOW" "LBLUE" "LPURPLE" "LCYAN" "WHITE")
 
+# Bell character used to set send urgecny to WM
+ALERT='\a'
+
 # PS1 style (Dracula based)
-export PS1="[\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;123m\]\u\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;84m\]\h\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;183m\]\w\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]]\n\[$(tput sgr0)\]\[\033[38;5;10m\]\\$>\[$(tput sgr0)\]"
+export PS1="$ALERT[\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;123m\]\u\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;84m\]\h\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;183m\]\w\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]]\n\[$(tput sgr0)\]\[\033[38;5;10m\]\\$>\[$(tput sgr0)\]"
 
 # Path
 export PATH="/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/Jonathas/.local/bin:/home/jonathas/.local/bin:/home/Jonathas/.local/bin:/opt/bin:/opt/android-ndk-r14b"

@@ -1,3 +1,4 @@
+#! /bin/bash
 # User specific aliases functions
 
 function sizeofthis {
