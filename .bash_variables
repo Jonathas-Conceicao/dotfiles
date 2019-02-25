@@ -31,7 +31,10 @@ ALERT='\a'
 export PS1="$ALERT[\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;123m\]\u\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;84m\]\h\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;183m\]\w\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]]\n\[$(tput sgr0)\]\[\033[38;5;10m\]\\$>\[$(tput sgr0)\]"
 
 # Path
-export PATH="/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/Jonathas/.local/bin:/home/jonathas/.local/bin:/home/Jonathas/.local/bin:/opt/bin:/opt/android-ndk-r14b"
+export PATH="$HOME/.local/bin:$HOME/bin:$HOME/.cabal/bin:/opt/bin:$PATH"
+
+# Unset ls colors variables to use terminal's colors
+unset LS_COLORS
 
 # Default editor
 export VISUAL=emacs

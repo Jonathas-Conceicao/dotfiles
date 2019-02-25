@@ -13,6 +13,10 @@ if [ "$hn" = "lups06" ]; then
 elif [ "$hn" = "lups10" ]; then
 	xrandr --output DVI-I-1 --auto --left-of HDMI-1
 	xrandr --output HDMI-1 --auto --primary
+elif [ "$hn" = "Jonathas-Legacy" ]; then
+	# Set touch pad options
+	xinput set-prop "SYNA3602:00 0911:5288 Touchpad" "libinput Tapping Enabled" 1
+	xinput set-prop "SYNA3602:00 0911:5288 Touchpad" "libinput Natural Scrolling Enabled" 0
 fi
 
 # Set background Wallpaper on X session
