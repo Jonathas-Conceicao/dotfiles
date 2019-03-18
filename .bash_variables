@@ -30,8 +30,11 @@ ALERT='\a'
 # PS1 style (Dracula based)
 export PS1="$ALERT[\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;123m\]\u\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;84m\]\h\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;183m\]\w\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]]\n\[$(tput sgr0)\]\[\033[38;5;10m\]\\$>\[$(tput sgr0)\]"
 
+# XMonad config and related applications
+export XMONAD_HOME="$HOME/.xmonad"
+
 # Path
-export PATH="$HOME/.local/bin:$HOME/bin:$HOME/.cabal/bin:/opt/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$XMONAD_HOME/tools:$HOME/.local/bin:$HOME/bin:$HOME/.cabal/bin:/opt/bin:$PATH"
 
 # Unset ls colors variables to use terminal's colors
 unset LS_COLORS
