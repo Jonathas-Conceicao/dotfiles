@@ -40,8 +40,8 @@ export PATH="$HOME/.cargo/bin:$XMONAD_HOME/tools:$HOME/.local/bin:$HOME/bin:$HOM
 unset LS_COLORS
 
 # Default editor
-export VISUAL=emacs
-export EDITOR="emacs -nw"
+export VISUAL="emacsclient"
+export EDITOR=$VISUAL
 
 # ClassPath for Java
 export CLASSPATH=$CLASSPATH:/opt/ClassPath/*:/usr/share/java/*

@@ -12,7 +12,7 @@ alias grep="grep --color=auto"
 alias grepR="grep -rnI"
 alias xclip="xclip -selection clipboard"
 
-alias emacsnw="env TERM=xterm-256color emacs -nw"
+alias emacsnw="emacsclient"
 
 alias Minecraft="primusrun java -Xmx5G -Xms5G -jar /opt/Minecraft/Minecraft.jar"
 
