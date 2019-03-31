@@ -22,6 +22,29 @@ function dummy {
 	echo -e $GITKEEP_MESSAGE >> $1/.gitkeep
 }
 
+function nvidia-on {
+	tee /proc/acpi/bbswitch <<<ON
+
+	modprobe nvidia
+	modprobe nvidia_uvm
+	modprobe nvidia_modeset
+	modprobe nvidia_drm modeset=1
+
+	systemctl restart lightdm
+}
+
+function nvidia-off {
+	tee /proc/acpi/bbswitch <<<OFF
+
+	modprobe nvidia_drm
+	modprobe nvidia_modeset
+	modprobe nvidia_uvm
+	modprobe nvidia
+
+	systemctl restart lightdm
+}
+
+
 #   This file echoes a bunch of color codes to the 
 #   terminal to demonstrate what's available.  Each 
 #   line is the color code of one forground color,

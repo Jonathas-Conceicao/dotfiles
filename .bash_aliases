@@ -14,6 +14,6 @@ alias xclip="xclip -selection clipboard"
 
 alias emacsnw="emacsclient"
 
-alias Minecraft="primusrun java -Xmx5G -Xms5G -jar /opt/Minecraft/Minecraft.jar"
+alias Minecraft="java -Xmx5G -Xms5G -jar /opt/Minecraft/Minecraft.jar"
 
 alias dunst_reset='killall dunst;notify-send "Low Urgency" "Dunst restarted and ready to go" -u low;notify-send "Normal Urgency" "Dunst restarted and ready to go" -u normal;notify-send "Critical Urgency" "Dunst restarted and ready to go" -u critical'
