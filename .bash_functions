@@ -1,6 +1,14 @@
 #! /bin/bash
 # User specific aliases functions
 
+function mless {
+	if (($(wc -l $1 2> /dev/null | awk '{print $1;}') > $(($LINES - 2)))); then
+		less $1
+	else
+		cat $1
+	fi
+}
+
 function sizeofthis {
 	du -h $1 | tail -n 1
 }
