@@ -6,7 +6,7 @@ function sizeofthis {
 }
 
 function countfiles {
-	ls -iq $1* | wc -l
+	ls -A $1 | wc -l
 }
 
 function clipToFile {
