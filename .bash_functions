@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 # User specific aliases functions
 
 function mless {
@@ -30,7 +30,7 @@ function dummy {
 	echo -e $GITKEEP_MESSAGE >> $1/.gitkeep
 }
 
-function nvidia-on {
+function nvidia_on {
 	tee /proc/acpi/bbswitch <<<ON
 
 	modprobe nvidia
@@ -41,7 +41,7 @@ function nvidia-on {
 	systemctl restart lightdm
 }
 
-function nvidia-off {
+function nvidia_off {
 	tee /proc/acpi/bbswitch <<<OFF
 
 	modprobe nvidia_drm

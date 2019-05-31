@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # Turn off system bell if on display
 if [ -n "$DISPLAY" ]; then

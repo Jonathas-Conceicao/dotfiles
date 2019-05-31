@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 # User specific aliases
 
 alias pingg="ping 8.8.8.8"
