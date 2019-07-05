@@ -27,6 +27,9 @@ xterm*VT100.Translations: #override \
 xterm*rightScrollBar: true
 xterm*ScrollBar: true
 
+! Emacs font for GUI
+emacs.font: DejaVu Sans Mono-10
+
 ! Dracula Xresources palette
 *.foreground: #F8F8F2
 *.background: #282A36
