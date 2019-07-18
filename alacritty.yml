@@ -1,0 +1,49 @@
+# Shoudl be linked to ~/.config/alacritty/alacritty.yml
+# Configuration for Alacritty, the GPU enhanced terminal emulator.
+
+# Colors (Dracula)
+colors:
+  primary:
+    background: '0x282a36'
+    foreground: '0xf8f8f2'
+  normal:
+    black:   '0x000000'
+    red:     '0xff5555'
+    green:   '0x50fa7b'
+    yellow:  '0xf1fa8c'
+    blue:    '0xcaa9fa'
+    magenta: '0xff79c6'
+    cyan:    '0x8be9fd'
+    white:   '0xbfbfbf'
+  bright:
+    black:   '0x575b70'
+    red:     '0xff6e67'
+    green:   '0x5af78e'
+    yellow:  '0xf4f99d'
+    blue:    '0xcaa9fa'
+    magenta: '0xff92d0'
+    cyan:    '0x9aedfe'
+    white:   '0xe6e6e6'
+
+# Live config reload (changes require restart)
+live_config_reload: true
+
+scrolling:
+  history: 50000
+  multiplier: 1
+  faux_multiplier: 1
+
+# Font configuration (changes require restart)
+font:
+  # normal:
+  #   family:
+  #   style:
+  size: 12.0
+
+key_bindings:
+  - { key: Up,   mods: Shift,         action: ScrollLineUp     }
+  - { key: Down, mods: Shift,         action: ScrollLineDown   }
+  - { key: Home, mods: Shift,         action: ScrollToTop      }
+  - { key: End,  mods: Shift,         action: ScrollToBottom   }
+  - { key: End,  mods: Shift,         action: ScrollToBottom   }
+  - { key: N,    mods: Control|Shift, action: SpawnNewInstance }
