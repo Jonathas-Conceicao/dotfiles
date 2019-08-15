@@ -57,3 +57,4 @@ export MYGHC=$WORKSPACE/ghc/
 
 # Format hisyory file to show date and time
 HISTTIMEFORMAT="%d/%m/%y %T "
+HISTSIZE=8001

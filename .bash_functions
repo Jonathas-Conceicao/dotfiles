@@ -52,6 +52,12 @@ function nvidia_off {
 	systemctl restart lightdm
 }
 
+# Transfer command from https://transfer.sh/
+transfer() {
+    wget -t 1 -qO - --method=PUT --body-file="$1" --header="Content-Type: $(file -b --mime-type "$1")" https://transfer.sh/$(basename "$1");
+    echo
+}
+alias transfer=transfer
 
 #   This file echoes a bunch of color codes to the 
 #   terminal to demonstrate what's available.  Each 
