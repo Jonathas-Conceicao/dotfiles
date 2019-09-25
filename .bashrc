@@ -27,3 +27,7 @@ fi
 if [ -f /etc/bash_completion ]; then
 	. /etc/bash_completion
 fi
+
+if [[ $(tty) == "/dev/tty1" ]]; then
+	startx /home/jonathas/.xmonad/xmonad-start
+fi
