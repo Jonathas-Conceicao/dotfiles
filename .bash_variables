@@ -33,8 +33,12 @@ export PS1="$ALERT[\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;123m\]\u\[$(tput 
 # XMonad config and related applications
 export XMONAD_HOME="$HOME/.xmonad"
 
-# Path
-export PATH="$HOME/.cargo/bin:$XMONAD_HOME/tools:$HOME/.local/bin:$HOME/bin:$HOME/.cabal/bin:/opt/bin:$PATH"
+# Extra bin locations
+export PATH="$HOME/.local/bin:$HOME/bin:/opt/bin:$PATH"
+# Cabal Path
+export PATH="$HOME/.cabal/bin:$PATH"
+# Cargo Path
+export PATH="$HOME/.cargo/bin:$PATH"
 
 # Unset ls colors variables to use terminal's colors
 unset LS_COLORS
