@@ -62,7 +62,7 @@ frame_width = 3
 close = mod1+mod4+space
 close_all = mod1+mod4+shift+space
 history = mod1+mod4+h
-context =
+context = mod1+mod4+j
 
 [urgency_low]
 frame_color = "#FF79C6"
@@ -88,8 +88,4 @@ timeout = 8
 
 [azlyrics]
     appname = "AzLyrics"
-    history_ignore = yes
-
-[lyrics]
-    appname = "Lyrics"
     history_ignore = yes
