@@ -13,6 +13,10 @@ case $(eval cat /etc/hostname) in
 		xrandr --output HDMI-1 --mode 1600x900  --right-of VGA-1 --primary
 		xrandr --output VGA-1  --mode 1280x1024 --left-of HDMI-1 --noprimary
 		;;
+	"lups08")
+		xrandr --output DVI-I-1 --auto --noprimary --right-of DVI-I-2
+		xrandr --output DVI-I-2 --auto --primary
+		;;
 	"lups10")
 		xrandr --output HDMI-1  --auto --right-of DVI-I-0 --primary
 		xrandr --output DVI-I-1 --auto --left-of  HDMI-1  --noprimary
