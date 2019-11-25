@@ -41,9 +41,16 @@ font:
   size: 9.0
 
 key_bindings:
-  - { key: Up,   mods: Shift,         action: ScrollLineUp     }
-  - { key: Down, mods: Shift,         action: ScrollLineDown   }
-  - { key: Home, mods: Shift,         action: ScrollToTop      }
-  - { key: End,  mods: Shift,         action: ScrollToBottom   }
-  - { key: End,  mods: Shift,         action: ScrollToBottom   }
+  - { key: Up,   mods: Shift, action: ScrollLineUp   }
+  - { key: Down, mods: Shift, action: ScrollLineDown }
+  - { key: Home, mods: Shift, action: ScrollToTop    }
+  - { key: End,  mods: Shift, action: ScrollToBottom }
+
+  - { key: V,     mods: Control, action: ScrollPageDown }
+  - { key: V,     mods: Alt,     action: ScrollPageUp   }
+  - { key: P,     mods: Alt,     action: ScrollLineUp   }
+  - { key: N,     mods: Alt,     action: ScrollLineDown }
+  - { key: Comma, mods: Alt,     action: ScrollToTop    }
+  - { key: Colon, mods: Alt,     action: ScrollToBottom }
+
   - { key: N,    mods: Control|Shift, action: SpawnNewInstance }

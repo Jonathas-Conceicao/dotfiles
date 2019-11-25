@@ -1,0 +1,4 @@
+"\eh": backward-kill-word
+
+# Disable keys
+"\e.": nop
