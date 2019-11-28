@@ -1,0 +1,13 @@
+@import "/usr/share/themes/Emacs/gtk-3.0/gtk-keys.css";
+
+@binding-set my-textview-bindings
+{
+  bind "<alt>h"  { "delete-from-cursor" (word-ends, -1) };
+  bind "<ctrl>k" { "move-cursor" (paragraph-ends, 1, 1)
+                   "cut-clipboard" () };
+}
+
+textview {
+  -gtk-key-bindings: my-textview-bindings,
+                     gtk-emacs-text-entry, gtk-emacs-text-view;
+}
