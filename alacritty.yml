@@ -31,7 +31,6 @@ live_config_reload: true
 scrolling:
   history: 50000
   multiplier: 1
-  faux_multiplier: 1
 
 # Font configuration (changes require restart)
 font:
