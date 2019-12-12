@@ -31,6 +31,10 @@ case $(eval cat /etc/hostname) in
 		xinput set-prop "SYNA3602:00 0911:5288 Touchpad" "libinput Natural Scrolling Enabled" 0
 		export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.x86_64.json
 		;;
+	"Jonathas-ArchG3")
+		xinput set-prop "DELL0949:00 04F3:30CB Touchpad" "libinput Tapping Enabled" 1
+		xinput set-prop "DELL0949:00 04F3:30CB Touchpad" "libinput Natural Scrolling Enabled" 0
+		;;
 esac
 
 # Set background Wallpaper on X session
