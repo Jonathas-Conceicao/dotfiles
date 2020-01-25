@@ -1,0 +1,30 @@
+[alias]
+# Watch for libs
+wlib = [ "watch", "-c"
+       , "-x", "check"
+       , "-x", "check --tests --examples --all-features"
+       , "-x", "clippy -- -D clippy::all"
+       , "-x", "build --tests"
+       , "-x", "build"
+       , "-x", "doc --no-deps --all-features --document-private-items"
+       ]
+
+# Watch for binaries
+wbin = [ "watch", "-c"
+       , "-x", "check"
+       , "-x", "check --tests"
+       , "-x", "clippy -- -D clippy::all"
+       , "-x", "build --tests"
+       , "-x", "build --release"
+       ]
+
+# Quick version of watch
+wquick = [ "watch", "-c"
+         , "-x", "check --tests"
+         , "-x", "build --tests"
+         , "-x", "build"
+         ]
+
+# Documentation check; needs package as parameter
+# ex: cargo docc actix
+docc = ["doc",  "--open", "--no-deps", "-p"]
