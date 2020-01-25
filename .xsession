@@ -34,6 +34,7 @@ case $(eval cat /etc/hostname) in
 	"Jonathas-ArchG3")
 		xinput set-prop "DELL0949:00 04F3:30CB Touchpad" "libinput Tapping Enabled" 1
 		xinput set-prop "DELL0949:00 04F3:30CB Touchpad" "libinput Natural Scrolling Enabled" 0
+		export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json
 		;;
 esac
 
