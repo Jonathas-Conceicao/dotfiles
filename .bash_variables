@@ -25,7 +25,11 @@ export COLORLIST=(${DEFAULT} ${RED} ${GREEN} ${YELLOW} ${BLUE} ${PURPLE} ${CYAN}
 export COLORLISTNAME=("DEFAULT" "RED" "GREEN" "YELLOW" "BLUE" "PURPLE" "CYAN" "LIGHTGRAY" "LRED" "LGREEN" "LYELLOW" "LBLUE" "LPURPLE" "LCYAN" "WHITE")
 
 # Bell character used to set send urgecny to WM
-ALERT='\a'
+if [ -n "$DISPLAY" ]; then
+	ALERT='\a'
+else
+	ALERT=''
+fi
 
 # PS1 style (Dracula based)
 export PS1="$ALERT[\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;123m\]\u\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;84m\]\h\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;183m\]\w\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]]\n\[$(tput sgr0)\]\[\033[38;5;10m\]\\$>\[$(tput sgr0)\]"
