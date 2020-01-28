@@ -11,8 +11,11 @@ alias ll="ls -l"
 alias grep="grep --color=auto"
 alias grepR="grep -rnI"
 alias xclip="xclip -selection clipboard"
+
 alias ssh="ssh -Cc aes256-ctr"
 alias sshX="ssh -Y"
+alias insecssh='ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null"'
+alias insecscp='scp -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null"'
 
 alias emacsnw="emacsclient"
 
