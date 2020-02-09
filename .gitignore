@@ -1,3 +1,6 @@
 *.un~
 *readline_history.txt
 .cgdb/readline_history.txt
+
+.\#*
+\#*
