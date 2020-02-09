@@ -28,3 +28,10 @@ wquick = [ "watch", "-c"
 # Documentation check; needs package as parameter
 # ex: cargo docc actix
 docc = ["doc",  "--open", "--no-deps", "-p"]
+
+# Run on gdb
+# ex: cargo gdb test
+gdb = [ "-Z", "unstable-options"
+      , "-Zconfig-include"
+      , "--config", "include=\"/home/jonathas/.cargo/gdb_runner.config\""
+      ]

@@ -7,3 +7,7 @@ define print_array
 	end
 end
 
+set history filename ~/.gdb_history
+set history save on
+set history size 300
+set history remove-duplicates unlimited
