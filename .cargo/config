@@ -35,3 +35,10 @@ gdb = [ "-Z", "unstable-options"
       , "-Zconfig-include"
       , "--config", "include=\"/home/jonathas/.cargo/gdb_runner.config\""
       ]
+
+# Run with sudo
+# ex: cargo run --bin foo-tool
+root = [ "-Z", "unstable-options"
+       , "-Zconfig-include"
+       , "--config", "include=\"/home/jonathas/.cargo/su_runner.config\""
+       ]
