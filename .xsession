@@ -39,5 +39,5 @@ case $(eval cat /etc/hostname) in
 esac
 
 # Set background Wallpaper on X session
-bgFile="$HOME/.xmonad/res/Wallpaper/current"
+bgFile="$HOME/.xmonad/res/XMonadLogo.jpg"
 feh --bg-scale $bgFile
