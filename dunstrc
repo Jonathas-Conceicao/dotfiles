@@ -1,5 +1,5 @@
 [global]
-font = DejaVu Sans Mono Book 12
+font = DejaVu Sans Mono Book 9
 
 markup = yes
 plain_text = no
@@ -57,12 +57,6 @@ max_icon_size = 64
 icon_path = /usr/share/icons/Adwaita/48x48/status/:/usr/share/icons/Adwaita/48x48/devices/
 
 frame_width = 3
-
-[shortcuts]
-close = mod1+mod4+space
-close_all = mod1+mod4+shift+space
-history = mod1+mod4+h
-context = mod1+mod4+j
 
 [urgency_low]
 frame_color = "#FF79C6"
