@@ -1,5 +1,5 @@
 [global]
-font = DejaVu Sans Mono Book 9
+font = DejaVu Sans Mono Book 12
 
 markup = yes
 plain_text = no
@@ -23,7 +23,7 @@ ignore_newline = no
 stack_duplicates = yes
 hide_duplicates_count = no
 
-geometry = "400x50-6+24"
+geometry = "600x50-6+24"
 
 shrink = no
 
