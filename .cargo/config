@@ -37,8 +37,15 @@ gdb = [ "-Z", "unstable-options"
       ]
 
 # Run with sudo
-# ex: cargo run --bin foo-tool
+# ex: cargo root run --bin foo-tool
 root = [ "-Z", "unstable-options"
        , "-Zconfig-include"
        , "--config", "include=\"/home/jonathas/.cargo/su_runner.config\""
        ]
+
+# Run global cache directory
+# ex: cargo run --bin foo-tool
+cached = [ "-Z", "unstable-options"
+         , "-Zconfig-include"
+         , "--config", "include=\"/home/jonathas/.cargo/global_cache.config\""
+         ]
