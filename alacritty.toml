@@ -1,3 +1,6 @@
+# Shoudl be linked to ~/.config/alacritty/alacritty.yml
+
+[general]
 live_config_reload = true
 
 [colors.bright]

@@ -17,9 +17,8 @@ case $(eval cat /etc/hostname) in
 		export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json
 		;;
 	"Dalaran")
-		xrandr --output eDP-1  --auto --primary
-		# xrandr --output eDP-1  --mode 1280x720 --left-of HDMI-1 --noprimary
-		# xrandr --output HDMI-1 --auto          --right-of eDP-1 --primary
+		xrandr --output eDP-1  --mode 1368x768 --left-of HDMI-1 --noprimary
+		xrandr --output HDMI-1 --auto          --right-of eDP-1 --primary
 		;;
 esac
 

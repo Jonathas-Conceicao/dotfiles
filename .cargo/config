@@ -33,19 +33,19 @@ docc = ["doc",  "--open", "--no-deps", "-p"]
 # ex: cargo gdb test
 gdb = [ "-Z", "unstable-options"
       , "-Zconfig-include"
-      , "--config", "include=\"/home/jonathas/.cargo/gdb_runner.config\""
+      , "--config", "include=\"/home/jonathas/.cargo/gdb_runner_config.toml\""
       ]
 
 # Run with sudo
 # ex: cargo root run --bin foo-tool
 root = [ "-Z", "unstable-options"
        , "-Zconfig-include"
-       , "--config", "include=\"/home/jonathas/.cargo/su_runner.config\""
+       , "--config", "include=\"/home/jonathas/.cargo/su_runner_config.toml\""
        ]
 
 # Run global cache directory
 # ex: cargo run --bin foo-tool
 cached = [ "-Z", "unstable-options"
          , "-Zconfig-include"
-         , "--config", "include=\"/home/jonathas/.cargo/global_cache.config\""
+         , "--config", "include=\"/home/jonathas/.cargo/global_cache_config.toml\""
          ]

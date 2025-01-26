@@ -45,6 +45,9 @@ export PATH="$HOME/.cabal/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 # ghcup Path
 export PATH="$HOME/.ghcup/bin:$PATH"
+# Android shit
+export PATH="/opt/android-sdk/cmdline-tools/latest/bin:$PATH"
+export PATH="/opt/android-sdk/platform-tools:$PATH"
 
 # Unset ls colors variables to use terminal's colors
 unset LS_COLORS
